@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="30.00001mm"
+   height="29.999998mm"
+   viewBox="0 0 30.00001 29.999998"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="orange_hand.png"
+   inkscape:export-xdpi="1451.4286"
+   inkscape:export-ydpi="1451.4286"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#000000"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:export-bgcolor="#ffffff00" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch172"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#fb9f08;stop-opacity:0.98044691;"
+         offset="0"
+         id="stop172" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer11"
+     inkscape:label="buttons"
+     transform="translate(-176.35407,-46.512145)">
+    <circle
+       style="fill:#740c0a;fill-opacity:0.57;fill-rule:evenodd;stroke-width:0.264583"
+       id="circle509"
+       cx="191.35408"
+       cy="61.512142"
+       r="15"
+       inkscape:label="stop_button"
+       inkscape:export-filename="svg_stop_timer_.svg"
+       inkscape:export-xdpi="3048.0007"
+       inkscape:export-ydpi="3048.0007" />
+    <text
+       xml:space="preserve"
+       style="font-size:6.35px;line-height:1.25;font-family:sans-serif;fill:#cb0e0e;fill-opacity:1;stroke-width:0.264583"
+       x="184.51195"
+       y="63.782272"
+       id="text509"
+       inkscape:label="stop_text"><tspan
+         sodipodi:role="line"
+         id="tspan509"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:'Helvetica Neue';-inkscape-font-specification:'Helvetica Neue';fill:#cb0e0e;fill-opacity:1;stroke-width:0.264583"
+         x="184.51195"
+         y="63.782272">Stop</tspan></text>
+  </g>
+</svg>

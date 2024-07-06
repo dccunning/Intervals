@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="2.9998169mm"
+   height="99.999817mm"
+   viewBox="0 0 2.9998169 99.999817"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="orange_hand.png"
+   inkscape:export-xdpi="1451.4286"
+   inkscape:export-ydpi="1451.4286"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#000000"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:export-bgcolor="#ffffff00" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch172"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#fb9f08;stop-opacity:0.98044691;"
+         offset="0"
+         id="stop172" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="hands"
+     style="display:inline"
+     transform="translate(-116.79293,-16.709478)">
+    <path
+       id="path179"
+       style="display:inline;fill:#1da96c;fill-opacity:1;fill-rule:nonzero;stroke-width:0.264999;stroke-dasharray:none"
+       d="m 118.04298,16.709477 v 0.1018 48.39808 0.0227 a 1.5,1.5 0 0 0 -1.25006,1.47691 1.5,1.5 0 0 0 1.25006,1.43299 v 5.66942 0.39791 h 0.49971 v -6.00015 -0.0217 a 1.5,1.5 0 0 0 1.25005,-1.47846 1.5,1.5 0 0 0 -1.25005,-1.4764 v -0.02322 -48.39808 -0.1018 z m 0.25011,48.99959 a 1,1 0 0 1 0.99994,0.99994 1,1 0 0 1 -0.99994,0.99994 1,1 0 0 1 -0.99994,-0.99994 1,1 0 0 1 0.99994,-0.99994 z"
+       inkscape:label="dark_orange"
+       inkscape:export-filename="orange_hand.png"
+       inkscape:export-xdpi="3048.186"
+       inkscape:export-ydpi="3048.186" />
+    <rect
+       style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke-width:0.264583"
+       id="rect506"
+       width="0.5"
+       height="42.5"
+       x="118.04283"
+       y="74.20929"
+       inkscape:export-filename="svg_orange_hand_100px.svg"
+       inkscape:export-xdpi="3048.0044"
+       inkscape:export-ydpi="3048.0044" />
+  </g>
+</svg>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="0.50000179mm"
+   height="100mm"
+   viewBox="0 0 0.50000179 100"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="orange_hand.png"
+   inkscape:export-xdpi="1451.4286"
+   inkscape:export-ydpi="1451.4286"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   sodipodi:docname="whole_drawing.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#000000"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:export-bgcolor="#ffffff00"
+     inkscape:zoom="1.9984199"
+     inkscape:cx="482.1309"
+     inkscape:cy="192.6522"
+     inkscape:window-width="1376"
+     inkscape:window-height="789"
+     inkscape:window-x="56"
+     inkscape:window-y="47"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer6" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch172"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#fb9f08;stop-opacity:0.98044691;"
+         offset="0"
+         id="stop172" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="hands"
+     style="display:inline"
+     transform="translate(-133.68685,-16.559326)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.264583"
+       id="rect5"
+       width="0.5"
+       height="48.75"
+       x="133.68686"
+       y="16.559326"
+       inkscape:label="white"
+       inkscape:export-filename="svg_white_hand.svg"
+       inkscape:export-xdpi="1451.4286"
+       inkscape:export-ydpi="1451.4286" />
+    <rect
+       style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke-width:0.271282"
+       id="rect6"
+       width="0.5"
+       height="51.25"
+       x="133.68686"
+       y="65.309326"
+       inkscape:label="clear51_25" />
+  </g>
+</svg>

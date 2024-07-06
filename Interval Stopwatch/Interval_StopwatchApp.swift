@@ -11,7 +11,9 @@ import SwiftUI
 struct Interval_StopwatchApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationView {
+                ContentView()
+            }.environment(\.colorScheme, .dark)
         }
     }
 }

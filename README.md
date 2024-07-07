@@ -1,14 +1,15 @@
-#  Intervals
+#  Intervals 
+<img src="https://github.com/dccunning/Intervals/blob/main/Interval%20Stopwatch/Assets.xcassets/AppIcon.appiconset/icon_v3.png" alt="App Icon" width="60"/>
 ios app for interval training, logging and sharing exercises.
 
 *Not yet released on the AppStore*
 
 ### What is Interval Training?
-Interval training involves doing an exercise for a set, typically short period of time, followed by a set  resting time period, and then repeating this process for a set number of times.
+Interval training involves doing an exercise for a set, typically short period of time, followed by a set resting time period, and then repeating this process for a set number of times.
 
 
 ### What Can I Use This App for?
-The Stopwatch tab of the app operates similar to the iphone Stopwatch with the additional functionality of being able to set an Active Interval time, Rest Interval time and number of Intervals.
+The Stopwatch tab of the app operates similarly to the iPhone’s Stopwatch with the additional functionality of being able to set an Active Interval time, Rest Interval time and number of Intervals. One sound is played when each active interval ends, another for each rest interval and one when the set number of intervals ends. This allows you to precisely time your interval workout. The other primary use is to log all of your workouts and their respective exercises, including customisable details of each.
 
 ### Current Features
 - Stopwatch tab:

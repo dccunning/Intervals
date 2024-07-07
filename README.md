@@ -1,15 +1,16 @@
 #  Intervals
 ios app for interval training, logging and sharing exercises.
+
 *Not yet released on the AppStore*
 
-#### What is Interval Training?
+### What is Interval Training?
 Interval training involves doing an exercise for a set, typically short period of time, followed by a set  resting time period, and then repeating this process for a set number of times.
 
 
-#### What Can I Use This App for?
+### What Can I Use This App for?
 The Stopwatch tab of the app operates similar to the iphone Stopwatch with the additional functionality of being able to set an Active Interval time, Rest Interval time and number of Intervals.
 
-#### Current Features
+### Current Features
 - Stopwatch tab:
     - Stopwatch 
     - Optional Active/Rest time selector ranging 5s to 59m 5s (5s increments)
@@ -26,7 +27,7 @@ The Stopwatch tab of the app operates similar to the iphone Stopwatch with the a
         - Add new exercise button and choose: Name, weight kg, reps, sets, duration, colour, notes
         - Ability to reorder and edit exercise details
 
-#### Features Planned
+### Features Planned
 - Workouts tab:
     - Begin a custom set Interval directly from the listed exercise in your workout
     - Mark individual exercises as complete
@@ -38,3 +39,11 @@ The Stopwatch tab of the app operates similar to the iphone Stopwatch with the a
   - Search for friends and publicly shared workouts/exercises/progress
   - View friends and their public workouts/exercises/progress
 
+
+
+
+### Stopwatch tab
+<img src="https://github.com/dccunning/Intervals/blob/main/screenshots/Stopwatch.PNG" alt="Stopwatch" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/StopwatchSettings.PNG" alt="Stopwatch Settings" width="200"/> 
+
+### Workouts tab
+<img src="https://github.com/dccunning/Intervals/blob/main/screenshots/Workouts.PNG" alt="Workouts" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/AddWorkout.PNG" alt="Add Workout" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/WorkoutDetails.PNG" alt="Workout Details" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/AddExercise.PNG" alt="Add Exercise" width="200"/>

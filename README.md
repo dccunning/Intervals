@@ -42,8 +42,8 @@ The Stopwatch tab of the app operates similar to the iphone Stopwatch with the a
 
 
 
-### Stopwatch tab
+### Stopwatch Tab Screenshots
 <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/Stopwatch.PNG" alt="Stopwatch" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/StopwatchSettings.PNG" alt="Stopwatch Settings" width="200"/> 
 
-### Workouts tab
+### Workouts Tab Screenshots
 <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/Workouts.PNG" alt="Workouts" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/AddWorkout.PNG" alt="Add Workout" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/WorkoutDetails.PNG" alt="Workout Details" width="200"/> <img src="https://github.com/dccunning/Intervals/blob/main/screenshots/AddExercise.PNG" alt="Add Exercise" width="200"/>

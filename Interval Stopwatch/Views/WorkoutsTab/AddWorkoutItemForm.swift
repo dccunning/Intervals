@@ -44,8 +44,8 @@ struct AddWorkoutItemFormView: View {
                     }.frame(height: 100)
                 }
                 
-                Section(header: Text("Color")) {
-                    Picker("Background Clour", selection: $selectedColor) {
+                Section(header: Text("Colour")) {
+                    Picker("Background Colour", selection: $selectedColor) {
                         ForEach(ColorSelection.allCases, id: \.self) { color in
                             Text(color.displayName).foregroundColor(color.color).tag(color)
                         }
@@ -53,7 +53,7 @@ struct AddWorkoutItemFormView: View {
                     .pickerStyle(DefaultPickerStyle())
                 }
                 
-                Section(header: Text("Chunk Size")) {
+                Section(header: Text("Size")) {
                     Picker(selection: $chunkSize, label: Text("Relative Workout Size")) {
                         ForEach(1..<11, id: \.self) { chunk in
                             Text("\(chunk)")

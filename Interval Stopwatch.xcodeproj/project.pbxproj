@@ -53,6 +53,7 @@
 		2693650D2BBC7ABA00602D89 /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
 		2693650F2BBF014500602D89 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
 		269365112BBF054700602D89 /* WorkoutPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutPreview.swift; sourceTree = "<group>"; };
+		269881AD2C3AAD2A00ACA081 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		26989BE22BEBAF590083434B /* WorkoutLogBars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogBars.swift; sourceTree = "<group>"; };
 		26989BE42BEBBA000083434B /* WorkoutActionDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutActionDisplay.swift; sourceTree = "<group>"; };
 		26C305C12B9F365E0008B940 /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
@@ -80,6 +81,7 @@
 		2608344C2B86BCEF00210130 = {
 			isa = PBXGroup;
 			children = (
+				269881AD2C3AAD2A00ACA081 /* README.md */,
 				260834572B86BCEF00210130 /* Interval Stopwatch */,
 				260834562B86BCEF00210130 /* Products */,
 				2693650A2BBC714300602D89 /* Frameworks */,

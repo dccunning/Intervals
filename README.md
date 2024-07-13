@@ -28,17 +28,20 @@ The Stopwatch tab of the app operates similarly to the iPhone’s Stopwatch with
         - Add new exercise button and choose: Name, weight kg, reps, sets, duration, colour, notes
         - Ability to reorder and edit exercise details
 
-### Features Planned
+### Features in Development
 - Workouts tab:
     - Begin a custom set Interval directly from the listed exercise in your workout
-    - Mark individual exercises as complete
+    - Mark individual exercises as complete for each day (saved in local database), marking a workout as complete for a given day will mark all its exercises as complete for that day as well.
 - Progress tab:
-    - Display a graph of your progress of a given exercise (normalised) and the ability to compare progress of each exercise metric (weight/time/sets/reps) with other exercises
-    - Group exercises designed to achieve a particular goal and visualise progress of each goal
-    - Insights on exercises you are over/underperforming on relative to each other
-- Share tab:
-  - Search for friends and publicly shared workouts/exercises/progress
-  - View friends and their public workouts/exercises/progress
+    - Display a graph of your progress of a given exercise
+    - The ability to compare progress of each exercise metric (weight/time/sets/reps) with other exercises (normalised)
+    - Group exercises designed to achieve a particular goal and visualise progress of a goal
+    - Insights on exercises you are over/underperforming and sugestions tailored to make positive progress over all goals
+- Trainer tab:
+  - Search for goals and get custom workout plans/goals/exercises on how to achive them based on other users experiences taking into account your profile details and workout history
+  - Personal profile details button
+  - Search for friends & public workouts/exercises/progress
+  - View friends' public workout profile workouts/exercises/progress
 
 
 

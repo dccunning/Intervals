@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ViewInputTimeInterval: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var interval: Interval
     @ObservedObject var settings: Settings
     @State private var selectedMinutes: Int
@@ -27,18 +28,19 @@ struct ViewInputTimeInterval: View {
     }
     
     var body: some View {
+        let textColor: Color = colorScheme == .dark ? .white : .black
         VStack(alignment: .center) {
             HStack(spacing: 0) {
                 Spacer().frame(width: border)
                 Text(interval.name)
-                    .foregroundColor(.white)
+                    .foregroundColor(textColor)
                     .font(.system(size: 20))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 if settings.pickerStyle == "Drop down" {
                     Picker(
                         selection: $selectedMinutes,
-                        label: Text("Minutes"),
+                        label: Text("Minutes").foregroundColor(textColor),
                         content: {
                             ForEach(0..<60) { min in
                                 Text("\(min)").tag(min).foregroundColor(interval.color.color)
@@ -50,7 +52,7 @@ struct ViewInputTimeInterval: View {
                 } else {
                     Picker(
                         selection: $selectedMinutes,
-                        label: Text("Minutes"),
+                        label: Text("Minutes").foregroundColor(textColor),
                         content: {
                             ForEach(0..<60) { min in
                                 Text("\(min)").tag(min).foregroundColor(interval.color.color)
@@ -61,12 +63,12 @@ struct ViewInputTimeInterval: View {
                     .scaleEffect(1.2).frame(minWidth: width/6, maxWidth: width/6, alignment: .trailing)
                 }
                 
-                Text("min").foregroundColor(.white).font(.system(size: 20))
+                Text("min").foregroundColor(textColor).font(.system(size: 20))
                 
                 if settings.pickerStyle == "Drop down" {
                     Picker(
                         selection: $selectedSeconds,
-                        label: Text("Seconds"),
+                        label: Text("Seconds").foregroundColor(textColor),
                         content: {
                             ForEach(0..<60 / 5) { index in
                                 let second = index * 5
@@ -79,7 +81,7 @@ struct ViewInputTimeInterval: View {
                 } else {
                     Picker(
                         selection: $selectedSeconds,
-                        label: Text("Seconds"),
+                        label: Text("Seconds").foregroundColor(textColor),
                         content: {
                             ForEach(0..<60 / 5) { index in
                                 let second = index * 5
@@ -92,10 +94,10 @@ struct ViewInputTimeInterval: View {
                 }
 
                 
-                Text("sec").foregroundColor(.white).font(.system(size: 20))
+                Text("sec").foregroundColor(textColor).font(.system(size: 20))
                 
                 Spacer().frame(width: border)
-            }.frame(maxWidth: .infinity).background(Color.black)
+            }.frame(maxWidth: .infinity)
         }
         .frame(height: height)
         .onChange(of: selectedMinutes) { updateIntervalTime() }

@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ViewSettings: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var settings: Settings
     @Binding var isPresented: Bool
     @ObservedObject var stopwatch: Stopwatch
@@ -25,16 +26,20 @@ struct ViewSettings: View {
                     firstInterval: firstInterval,
                     secondInterval: secondInterval
                 )
-                InteractionSettingsSection(
-                    settings: settings,
-                    stopwatch: stopwatch
-                )
                 ColorSettingsSection(
                     settings: settings,
                     cycle: cycle,
                     firstInterval: firstInterval,
                     secondInterval: secondInterval
                 )
+                InteractionSettingsSection(
+                    settings: settings,
+                    stopwatch: stopwatch
+                )
+                MeasurementSettingsSection(
+                    settings: settings
+                )
+                EmailFeedbackSettingsSection()
             }
             .navigationBarTitle("Settings")
             .navigationBarItems(trailing: Button("Done") {
@@ -42,7 +47,7 @@ struct ViewSettings: View {
             }).background(Color.black)
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(colorScheme)
     }
 }
 
@@ -147,5 +152,54 @@ struct ColorSettingsSection: View {
                 settings.countColor = newValue
             }
         }
+    }
+}
+
+struct MeasurementSettingsSection: View {
+    @ObservedObject var settings: Settings
+    
+    var body: some View {
+        Section(header: Text("Measurements")) {
+            Picker("Measurement System", selection: $settings.measurementSystem) {
+                Text(MeasurementSystem.metric.displayName).tag(MeasurementSystem.metric)
+                Text(MeasurementSystem.imperial.displayName).tag(MeasurementSystem.imperial)
+            }.pickerStyle(DefaultPickerStyle()).onChange(of: settings.measurementSystem) {
+                oldValue, newValue in
+                settings.measurementSystem = newValue
+            }
+        }
+    }
+}
+
+struct EmailFeedbackSettingsSection: View {
+    @State var showingOpenEmailConfirmation: Bool = false
+    
+    var body: some View {
+        Section(header: Text("Feedback")) {
+            Section {
+                Button(action: {
+                    showingOpenEmailConfirmation = true
+                }) {
+                    Text("Report a bug")
+                        .foregroundColor(.blue)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }.confirmationDialog("Report a bug or make a feature suggestion via email", isPresented: $showingOpenEmailConfirmation, titleVisibility: .visible) {
+                    Button("Open", role: .none) {
+                        draftEmail()
+                        showingOpenEmailConfirmation = false
+                    }
+                    Button("Cancel", role: .cancel) {
+                        showingOpenEmailConfirmation = false
+                    }
+                }
+            }
+        }
+    }
+    
+    private func draftEmail() {
+        guard let url = URL(string: "mailto:intervals.app@gmail.com?subject=Feedback&body=") else {
+            return
+        }
+        UIApplication.shared.open(url)
     }
 }

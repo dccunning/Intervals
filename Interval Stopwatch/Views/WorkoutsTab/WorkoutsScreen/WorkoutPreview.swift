@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct WorkoutPreview: View {
+    @Binding var workoutsCompletedList: [WorkoutsCompleted]
+    @Binding var currentSelectedDate: Date
+    @Binding var workouts: [Workout]
     @Binding var workout: Workout
     var border: CGFloat
     var color: ColorSelection
@@ -22,7 +25,10 @@ struct WorkoutPreview: View {
         return " "
     }
     
-    init(workout: Binding<Workout>, border: CGFloat) {
+    init(workoutsCompletedList: Binding<[WorkoutsCompleted]>, currentSelectedDate: Binding<Date>, workouts: Binding<[Workout]>, workout: Binding<Workout>, border: CGFloat) {
+        self._workoutsCompletedList = workoutsCompletedList
+        self._currentSelectedDate = currentSelectedDate
+        self._workouts = workouts
         self._workout = workout
         self.border = border
         self.color = ColorSelection.fromString(workout.wrappedValue.color) ?? .white
@@ -59,5 +65,36 @@ struct WorkoutPreview: View {
         }
         .padding(-5*border/4)
         .background(.clear)
+        .swipeActions (edge: .leading) {
+            let workoutIsCompleted: Bool = DataBase().workoutIsCompletedOnDate(workoutId: workout.id, date: currentSelectedDate)
+            let icon: String = workoutIsCompleted ? "xmark" : "checkmark"
+            let tint: Color = workoutIsCompleted ? Color.gray : Color(red: 0, green: 0.5, blue: 0)
+            
+            Button(action: {
+                if DataBase().toggleOrInsertWorkoutCompletedTableRow(
+                    workoutId: workout.id,
+                    markedForDate: currentSelectedDate
+                ) {
+                    workout.lastCompletedTimestamp = DataBase().updateWorkoutLastCompletedTimestamp(
+                        workoutId: workout.id
+                    )
+                    workouts = DataBase().fetchWorkoutTableRows()
+                    updateWorkoutsSelected()
+                }
+            }) {
+                Image(systemName: icon)
+            }.tint(tint)
+        }
     }
+    
+    func updateWorkoutsSelected() {
+        let dateWithTimeZone: Date = Calendar.current.startOfDay(for: Date()).addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT(for: Date())))
+        let dateSince = Calendar.current.date(byAdding: .day, value: -14, to: dateWithTimeZone) ?? dateWithTimeZone
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let formattedDateSince = dateFormatter.string(from: dateSince)
+        workoutsCompletedList = DataBase().fetchWorkoutsCompletedTableRows(dateSince: formattedDateSince)
+    }
+    
 }

@@ -19,6 +19,39 @@ enum PickerStyleSelection {
     }
 }
 
+enum MeasurementSystem: String, CaseIterable {
+    case metric
+    case imperial
+    
+    var displayName: String {
+        switch self {
+        case .metric: return "Kilos"
+        case .imperial: return "Pounds"
+        }
+    }
+    
+    var shortForm: String {
+        switch self {
+        case .metric: return "kg"
+        case .imperial: return "lbs"
+        }
+    }
+    
+    var multiplier: Double {
+        switch self {
+        case .metric: return 1.25
+        case .imperial: return 2.5
+        }
+    }
+    
+    var specifier: String {
+        switch self {
+        case .metric: return "%.2f"
+        case .imperial: return "%.1f"
+        }
+    }
+}
+
 enum ColorSelection: String, CaseIterable {
     case blue
     case red
@@ -66,6 +99,12 @@ enum ColorSelection: String, CaseIterable {
     }
 }
 
+extension ColorSelection {
+    static var allNonClearColors: [ColorSelection] {
+        return allCases.filter { $0 != .clear }
+    }
+}
+
 
 class Settings: ObservableObject {
     @Published var soundEnabled: Bool {didSet {UserDefaults.standard.set(soundEnabled, forKey: "soundEnabled")}}
@@ -78,9 +117,10 @@ class Settings: ObservableObject {
     @Published var restSound: SoundPlayer.SystemSound {didSet {UserDefaults.standard.set(restSound.rawValue, forKey: "restSound")}}
     @Published var endSound: SoundPlayer.SystemSound {didSet {UserDefaults.standard.set(endSound.rawValue, forKey: "endSound")}}
     @Published var tabSelectedValue: Int {didSet {UserDefaults.standard.set(tabSelectedValue, forKey: "tabSelectedValue")}}
+    @Published var measurementSystem: MeasurementSystem {didSet {UserDefaults.standard.set(measurementSystem.rawValue, forKey: "measurementSystem")}}
 
     
-    init() {// Initialise settings for first use of app with User Defaults
+    init() {// Initialising settings for first use of app with User Defaults
         if let soundEnabledValue = UserDefaults.standard.object(forKey: "soundEnabled") {
             self.soundEnabled = soundEnabledValue as? Bool ?? true
         } else {
@@ -157,5 +197,12 @@ class Settings: ObservableObject {
             self.tabSelectedValue = 1
         }
 
+        if let measurementSystemRawValue = UserDefaults.standard.string(forKey: "measurementSystem"),
+            let measurementSystemValue = MeasurementSystem(rawValue: measurementSystemRawValue) {
+            self.measurementSystem = measurementSystemValue
+        } else {
+            UserDefaults.standard.set(MeasurementSystem.metric.rawValue, forKey: "measurementSystem")
+            self.measurementSystem = MeasurementSystem.metric
+        }
     }
 }

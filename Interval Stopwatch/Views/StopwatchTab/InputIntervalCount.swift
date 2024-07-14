@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ViewInputIntervalCount: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var cycle: Cycle
     @ObservedObject var settings: Settings
     var height: CGFloat
@@ -23,10 +24,11 @@ struct ViewInputIntervalCount: View {
     }
     
     var body: some View {
+        let textColor: Color = colorScheme == .dark ? .white : .black
         VStack(alignment: .center) {
             HStack(spacing: 0) {
                 Spacer().frame(width: border)
-                Text("Intervals")
+                Text("Intervals").foregroundColor(textColor)
                     .foregroundColor(.white)
                     .font(.system(size: 20))
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -34,7 +36,7 @@ struct ViewInputIntervalCount: View {
                 if settings.pickerStyle == "Drop down" {
                     Picker(
                         selection: $cycle.selectedCount,
-                        label: Text("Intervals"),
+                        label: Text("Intervals").foregroundColor(textColor),
                         content: {
                             Text("∞").tag(0).foregroundColor(cycle.color.color)
                             ForEach(Array(1..<cycle.maxNumber + 1), id: \.self) { count in
@@ -47,7 +49,7 @@ struct ViewInputIntervalCount: View {
                 } else {
                     Picker(
                         selection: $cycle.selectedCount,
-                        label: Text("Intervals"),
+                        label: Text("Intervals").foregroundColor(textColor),
                         content: {
                             Text("∞").tag(0).foregroundColor(cycle.color.color)
                             ForEach(Array(1..<cycle.maxNumber + 1), id: \.self) { count in
@@ -64,7 +66,7 @@ struct ViewInputIntervalCount: View {
                 Spacer().frame(width: width/6)
                 Text("sec").foregroundColor(.white).font(.system(size: 20)).hidden()
                 Spacer().frame(width: border)
-            }.frame(maxWidth: .infinity).background(Color.black)
+            }.frame(maxWidth: .infinity)
         }.frame(height: height)
     }
 }

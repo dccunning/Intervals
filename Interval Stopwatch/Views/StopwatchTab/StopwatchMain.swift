@@ -46,7 +46,8 @@ struct ViewStopwatchMain: View {
             VStack(spacing: 0) {
                 let clockWidth: CGFloat = min(screenHeight/2, widthMinusBorder)
                 ZStack {
-                    ViewClockFaceDisplayTime(// max 50% height
+                    // max 50% height
+                    ViewClockFaceDisplayTime(
                         stopwatch: myStopwatch,
                         cycle: myCycle,
                         firstInterval: activeInterval,
@@ -65,7 +66,8 @@ struct ViewStopwatchMain: View {
                     ViewSettings(settings: mySettings, isPresented: $isSettingsPresented, stopwatch: myStopwatch, cycle: myCycle, firstInterval: activeInterval, secondInterval: restInterval)
                 }
                 
-                ViewTimeControl(// max 12.5% height
+                // max 12.5% height
+                ViewTimeControl(
                     stopwatch: myStopwatch,
                     startSound: startSound,
                     circleWidth: clockWidth/4,
@@ -73,7 +75,8 @@ struct ViewStopwatchMain: View {
                 )
                                     
                 VStack(alignment: .leading, spacing: 0) {
-                    ViewInputTimeInterval(// max 25% height
+                    // max 25% height
+                    ViewInputTimeInterval(
                         interval: activeInterval,
                         settings: mySettings,
                         height: min(screenHeight/12, 50),
@@ -81,7 +84,7 @@ struct ViewStopwatchMain: View {
                         border: border
                     ).disabled(myStopwatch.isRunning)
                     
-                    ViewInputTimeInterval(// included ^
+                    ViewInputTimeInterval(
                         interval: restInterval,
                         settings: mySettings,
                         height: min(screenHeight/12, 50),
@@ -89,7 +92,7 @@ struct ViewStopwatchMain: View {
                         border: border
                     ).disabled(myStopwatch.isRunning)
                     
-                    ViewInputIntervalCount(// included ^
+                    ViewInputIntervalCount(
                         cycle: myCycle,
                         settings: mySettings,
                         height: min(screenHeight/12, 50),
@@ -97,8 +100,10 @@ struct ViewStopwatchMain: View {
                         border: border
                     ).disabled(myStopwatch.isRunning || currentCycleDuration == 0)
                     
+                    
                     Spacer()
-                    HStack(spacing: 0) {// max 12.5% height
+                    // max 12.5% height
+                    HStack(spacing: 0) {
                         Spacer().frame(width: border)
                         ViewCurrentIntervalTracking(
                             stopwatch: myStopwatch,
@@ -119,11 +124,7 @@ struct ViewStopwatchMain: View {
                 }
                 
             }
-        }.background(Color.black)
+        }
         
     }
-}
-
-#Preview {
-    ContentView()
 }

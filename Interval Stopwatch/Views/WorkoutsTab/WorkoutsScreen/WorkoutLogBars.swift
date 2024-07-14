@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct WorkoutLogBars: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding var workoutsCompletedList: [WorkoutsCompleted]
     @Binding var currentDatetime: Date
     @Binding var currentSelectedDate: Date
@@ -25,6 +26,9 @@ struct WorkoutLogBars: View {
     var body: some View {
         let barSpacing: CGFloat = 10
         let barHeight: CGFloat = 70
+        let selectedColumnColor: Color = colorScheme == .dark ? Color.white.opacity(0.2) : Color.black.opacity(0.2)
+        let defaultColumnColor: Color = colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.05)
+        let weekTextColor: Color = colorScheme == .dark ? Color.white.opacity(0.5) : Color.black.opacity(0.5)
         
         HStack(spacing: barSpacing) {
             ForEach(1..<15) { index in
@@ -37,7 +41,7 @@ struct WorkoutLogBars: View {
                         lastClickedIndex = index
                     }) {
                         ZStack(alignment: .bottom) {
-                            Rectangle().foregroundColor(Color.gray.opacity(0.2)).frame(width: 16, height: barHeight).cornerRadius(1)
+                            Rectangle().foregroundColor(defaultColumnColor).frame(width: 16, height: barHeight).cornerRadius(1)
                            
                             VStack(spacing: 0) {
                                 ForEach(workoutsCompletedList.filter { $0.indexDate == index }.sorted(by: { $0.updatedTimestamp >= $1.updatedTimestamp }), id: \.id) { workoutCompleted in
@@ -57,7 +61,7 @@ struct WorkoutLogBars: View {
                             }.cornerRadius(1)
                             
                             Rectangle()
-                                .foregroundColor(lastClickedIndex == index ? Color.white.opacity(0.1) : Color.black.opacity(0.2))
+                                .foregroundColor(lastClickedIndex == index ? selectedColumnColor : defaultColumnColor)
                                 .frame(width: 16, height: barHeight)
                             .cornerRadius(1)
                         }
@@ -68,7 +72,7 @@ struct WorkoutLogBars: View {
                     let dayOfWeekCharacter: Character = Calendar.current.shortWeekdaySymbols[dayOfWeekNumber].first ?? " "
                     
                     Text(String(dayOfWeekCharacter))
-                        .foregroundColor(Color.white.opacity(0.5))
+                        .foregroundColor(weekTextColor)
                         .font(.system(size: 10))
                 }
             }

@@ -13,7 +13,7 @@ struct Interval_StopwatchApp: App {
         WindowGroup {
             NavigationView {
                 ContentView()
-            }.environment(\.colorScheme, .dark)
+            }
         }
     }
 }

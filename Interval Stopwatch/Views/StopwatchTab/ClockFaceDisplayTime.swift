@@ -19,6 +19,7 @@ class NextLine {
 }
 
 struct ViewClockFaceDisplayTime: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var stopwatch: Stopwatch
     @ObservedObject var cycle: Cycle
     @ObservedObject var firstInterval: Interval
@@ -40,9 +41,16 @@ struct ViewClockFaceDisplayTime: View {
     }
     
     var body: some View {
+        let timeColor: Color = colorScheme == .dark ? .white : .black
         ZStack {
-            Image("svg_white_face_detailed").resizable().aspectRatio(contentMode: .fit)
-                .frame(width: clockWidth, height: clockWidth)
+            if colorScheme == .dark {
+                Image("svg_white_face_detailed").resizable().aspectRatio(contentMode: .fit)
+                    .frame(width: clockWidth, height: clockWidth)
+            } else {
+                Image("svg_black_face_detailed").resizable().aspectRatio(contentMode: .fit)
+                    .frame(width: clockWidth, height: clockWidth)
+            }
+            
                         
             if stopwatch.showEndLines && atLeastOneIntervalSet {
                 let line = getNextLine()
@@ -63,7 +71,7 @@ struct ViewClockFaceDisplayTime: View {
             // Display digital time
             Text("\(formattedElapsedTime())")
                 .font(Font.system(size: timeFont).monospacedDigit())
-                .foregroundColor(.white)
+                .foregroundColor(timeColor)
                 .offset(y: halfWayDownFromClockCenter)
         }
     }

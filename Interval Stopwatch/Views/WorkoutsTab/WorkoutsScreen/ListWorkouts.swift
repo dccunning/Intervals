@@ -8,30 +8,31 @@
 import SQLite3
 import SwiftUI
 
-struct AllWorkoutsListView: View {
+struct ListWorkoutsView: View {
+    @State private var mySettings: Settings
     @State private var isAddWorkoutMenuPresented: Bool = false
     @State private var workouts: [Workout] = []
     @State private var currentSelectedDate: Date = Calendar.current.startOfDay(for: Date()).addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT(for: Date())))
     @State private var lastClickedIndex: Int = 14
     @State private var workoutsCompletedList: [WorkoutsCompleted] = []
         
-    init() {
+    init(settings: Settings) {
         UITableView.appearance().backgroundColor = .black
         DataBase().createWorkoutsCompletedTable()
         DataBase().createWorkoutTable()
         DataBase().createExerciseTable()
+        self._mySettings = State(initialValue: settings)
     }
     
     @State private var dateWithTimeZone: Date = Calendar.current.startOfDay(for: Date()).addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT(for: Date())))
     
     
     var body: some View {
-        let verticalSpacer: CGFloat = 15
+        let verticalSpacer: CGFloat = 10
         let workoutPreviewHeight: CGFloat = 50
-        let workoutListSpacing: CGFloat = 12
+        let workoutListSpacing: CGFloat = 10
         
         NavigationView {
-            
             VStack {
                 WorkoutLogBars(
                     workoutsCompletedList: $workoutsCompletedList,
@@ -43,38 +44,33 @@ struct AllWorkoutsListView: View {
                 })
                 
                 Spacer().frame(height: verticalSpacer)
-                ZStack {//
-//                    Color.black.edgesIgnoringSafeArea(.all)
                     List {
                         ForEach(workouts.indices, id: \.self) { index in
-                            WorkoutPreview(workout: self.$workouts[index], border: 10)
+                            WorkoutPreview(
+                                workoutsCompletedList: self.$workoutsCompletedList,
+                                currentSelectedDate: self.$currentSelectedDate,
+                                workouts: self.$workouts,
+                                workout: self.$workouts[index],
+                                border: 10
+                            )
                             .background(
-                                    NavigationLink("", destination: ListExerciseDetails(workout: self.$workouts[index])
-                                    ).opacity(0)
-                                ).frame(height: workoutPreviewHeight)
-                            .swipeActions (edge: .leading) {
-                                let workoutIsCompleted: Bool = DataBase().workoutIsCompletedOnDate(workoutId: workouts[index].id, date: currentSelectedDate)
-                                let icon: String = workoutIsCompleted ? "xmark" : "checkmark"
-                                let tint: Color = workoutIsCompleted ? Color.gray : Color(red: 0, green: 0.5, blue: 0)
-                                
-                                Button(action: {
-                                    if DataBase().toggleOrInsertWorkoutCompletedTableRow(workoutId: workouts[index].id, markedForDate: currentSelectedDate) {
-                                    } else {
-                                        print("Error executing toggle/insert query")
-                                    }
-                                    workouts[index].lastCompletedTimestamp = DataBase().updateWorkoutLastCompletedTimestamp(workoutId: workouts[index].id)
-                                    workouts = DataBase().fetchWorkoutTableRows()
-                                    
-                                    updateWorkoutsSelected()
-                                }) {
-                                    Image(systemName: icon)
-                                }.tint(tint)
-                            }
+                                NavigationLink(
+                                    "",
+                                    destination: ListExercisesView(
+                                        settings: mySettings,
+                                        workout: self.$workouts[index],
+                                        workouts: self.$workouts,
+                                        currentSelectedDate: self.$currentSelectedDate
+                                    )
+                                ).opacity(0)
+                            )
+                            .frame(height: workoutPreviewHeight)
                             .listRowBackground(ColorSelection.fromString(self.workouts[index].color)?.color)
                             .id(UUID())
                         }
                         .onMove { (indices, newOffset) in
                             self.workouts.move(fromOffsets: indices, toOffset: newOffset)
+                            _ = DataBase().updateWorkoutIndexes(workouts: workouts)
                         }
                     }
                     .listRowSpacing(workoutListSpacing)
@@ -90,12 +86,24 @@ struct AllWorkoutsListView: View {
                             Image(systemName: "plus").font(.title2)
                                 .foregroundColor(.blue)
                         }.sheet(isPresented: $isAddWorkoutMenuPresented) {
-                            AddWorkoutItemFormView(isPresented: self.$isAddWorkoutMenuPresented, workouts: self.$workouts)
+                            WorkoutFormView(
+                                isPresented: self.$isAddWorkoutMenuPresented,
+                                workouts: self.$workouts,
+                                editForWorkout: .constant(
+                                    Workout(
+                                        id: -1,
+                                        name: "",
+                                        durationMinutes: 0,
+                                        color: "",
+                                        chunkSize: 0,
+                                        lastCompletedTimestamp: nil
+                                    )
+                                ),
+                                goToAllWorkouts: .constant(false)
+                            )
                         }
                     )
-                    .navigationBarTitleTextColor(.white)
-                }//
-            }.background(Color.black)
+            }
         }.onAppear(perform: {
             workouts = DataBase().fetchWorkoutTableRows()
         })
@@ -124,8 +132,3 @@ extension View {
 }
 
 
-
-
-#Preview {
-    ContentView()
-}

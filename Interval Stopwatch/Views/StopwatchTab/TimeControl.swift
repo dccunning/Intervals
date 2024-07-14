@@ -9,6 +9,7 @@ import SwiftUI
 import AudioToolbox
 
 struct ViewTimeControl: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var stopwatch: Stopwatch
     var startSound: SoundPlayer.SystemSound
     var circleWidth: CGFloat
@@ -22,6 +23,7 @@ struct ViewTimeControl: View {
     }
     
     var body: some View {
+        let modeStringNameAddon: String = colorScheme == .dark ? "" : "_light_mode"
         HStack(alignment: .center) { // Timer control buttons
             Spacer().frame(width: border)
             
@@ -29,7 +31,7 @@ struct ViewTimeControl: View {
                 Button {
                     stopwatch.resetTimer()
                 } label: {
-                    Image("svg_reset_button").resizable().aspectRatio(contentMode: .fit)
+                    Image("svg_reset_button\(modeStringNameAddon)").resizable().aspectRatio(contentMode: .fit)
                         .frame(width: circleWidth, height: circleWidth)
                 }.contentShape(Circle())
                 
@@ -38,11 +40,11 @@ struct ViewTimeControl: View {
                 Button {
                     stopwatch.startTimer()
                 } label: {
-                    Image("svg_start_timer").resizable().aspectRatio(contentMode: .fit)
+                    Image("svg_start_timer\(modeStringNameAddon)").resizable().aspectRatio(contentMode: .fit)
                         .frame(width: circleWidth, height: circleWidth)
                 }.contentShape(Circle())
             } else if stopwatch.isRunning { // Timer is running: Pause.
-                Image("svg_grey_unbutton").resizable().aspectRatio(contentMode: .fit)
+                Image("svg_grey_unbutton\(modeStringNameAddon)").resizable().aspectRatio(contentMode: .fit)
                     .frame(width: circleWidth, height: circleWidth)
                 
                 Spacer()
@@ -50,11 +52,11 @@ struct ViewTimeControl: View {
                 Button {
                     stopwatch.stopTimer()
                 } label: {
-                    Image("svg_stop_timer").resizable().aspectRatio(contentMode: .fit)
+                    Image("svg_stop_timer\(modeStringNameAddon)").resizable().aspectRatio(contentMode: .fit)
                         .frame(width: circleWidth, height: circleWidth)
                 }.contentShape(Circle())
             } else { // Timer is in restarted state: Start.
-                Image("svg_grey_unbutton").resizable().aspectRatio(contentMode: .fit)
+                Image("svg_grey_unbutton\(modeStringNameAddon)").resizable().aspectRatio(contentMode: .fit)
                     .frame(width: circleWidth, height: circleWidth)
                 
                 Spacer()
@@ -62,7 +64,7 @@ struct ViewTimeControl: View {
                 Button {
                     stopwatch.startTimer(startSound: startSound)
                 } label: {
-                    Image("svg_start_timer").resizable().aspectRatio(contentMode: .fit)
+                    Image("svg_start_timer\(modeStringNameAddon)").resizable().aspectRatio(contentMode: .fit)
                         .frame(width: circleWidth, height: circleWidth)
                 }.contentShape(Circle())
             }

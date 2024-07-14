@@ -21,7 +21,7 @@ struct ContentView: View {
                         Text("Stopwatch")
                     }.tag(1)
                 
-                AllWorkoutsListView()
+                ListWorkoutsView(settings: mySettings)
                     .tabItem {
                         Image(systemName: "figure.run")
                         Text("Workouts")
@@ -34,15 +34,5 @@ struct ContentView: View {
                 UITabBar.appearance().standardAppearance = standardAppearance
             }
         }
-        
-        //        .onAppear {// Reset defaults for TESTING ONLY
-        //            let defaults = UserDefaults.standard
-        //            if let bundleID = Bundle.main.bundleIdentifier {
-        //                defaults.removePersistentDomain(forName: bundleID)
-        //            }
-        //        }
     }
-}
-#Preview {
-    ContentView()
 }

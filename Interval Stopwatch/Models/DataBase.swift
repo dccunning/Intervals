@@ -79,7 +79,6 @@ class DataBase {
         return results.isEmpty ? nil : results
     }
 
-    
     func execute(query: String) -> Bool {
         var statement: OpaquePointer?
         
@@ -107,6 +106,7 @@ class DataBase {
         let createTableQuery = """
         CREATE TABLE IF NOT EXISTS Workouts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            workoutIndex INTEGER,
             name TEXT,
             durationMinutes INTEGER,
             color TEXT,
@@ -117,7 +117,7 @@ class DataBase {
         if self.execute(query: createTableQuery) {
             print("Table created or exists: Workouts")
         } else {
-            print("Error creating WorkoutsCompleted table.")
+            print("Error creating Workouts table.")
         }
     }
     
@@ -129,7 +129,7 @@ class DataBase {
     func fetchWorkoutTableRows() -> [Workout] {
         var workouts: [Workout] = []
 
-        let query = "SELECT id, name, durationMinutes, color, chunkSize, LastCompletedTimestamp FROM Workouts"
+        let query = "SELECT id, name, durationMinutes, color, chunkSize, LastCompletedTimestamp FROM Workouts ORDER BY workoutIndex IS NULL, workoutIndex ASC, id ASC;"
         var statement: OpaquePointer?
 
         if sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK {
@@ -166,18 +166,32 @@ class DataBase {
         return workouts
     }
     
+    func updateWorkoutIndexes(workouts: [Workout]) -> Bool {
+        let mapworkoutIndexChange: [(workoutId: Int, workoutIndex: Int)] = workouts.enumerated().map { (index, workout) in
+            return (workout.id, index)
+        }
+        
+        for (workoutId, workoutIndex) in mapworkoutIndexChange {
+            let query = "UPDATE Workouts SET workoutIndex = \(workoutIndex) WHERE id = \(workoutId);"
+
+            if self.execute(query: query) {
+                continue
+            } else {
+                print("Error updating workout with id \(workoutId)")
+                return false
+            }
+        }
+        return true
+    }
+    
     func createWorkoutsCompletedTable() {
-        let dateTimeFormatter = DateFormatter()
-        dateTimeFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        dateTimeFormatter.timeZone = TimeZone(identifier: "UTC")
-        let updatedTimestamp = dateTimeFormatter.string(from: Date())
         let createTableQuery = """
         CREATE TABLE IF NOT EXISTS WorkoutsCompleted (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             workoutId INTEGER,
             markedForDate TIMESTAMP,
             completed BOOL,
-            updatedTimestamp TIMESTAMP DEFAULT '\(updatedTimestamp)',
+            updatedTimestamp TIMESTAMP,
             UNIQUE(markedForDate, workoutId)
         );
         """
@@ -189,7 +203,7 @@ class DataBase {
         }
     }
     
-    func toggleOrInsertWorkoutCompletedTableRow(workoutId: Int, markedForDate: Date) -> Bool {
+    func toggleOrInsertWorkoutCompletedTableRow(workoutId: Int, markedForDate: Date, setAsComplete: Bool = false) -> Bool {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = TimeZone(identifier: "UTC")
@@ -210,7 +224,7 @@ class DataBase {
         if let result = selectQuery(checkQuery), !result.isEmpty, !result[0].isEmpty {
             if let firstRow = result.first, result.count > 0 {
                 let currentCompleted = firstRow[1] as? Int == 1
-                let toggleCompleted = !currentCompleted
+                let toggleCompleted = !currentCompleted || setAsComplete
 
                 let updateQuery = """
                 UPDATE WorkoutsCompleted
@@ -224,8 +238,8 @@ class DataBase {
             }
         } else {
             let insertQuery = """
-            INSERT INTO WorkoutsCompleted (workoutId, markedForDate, completed)
-            VALUES (\(workoutId), '\(formattedDate)', 1);
+            INSERT INTO WorkoutsCompleted (workoutId, markedForDate, completed, updatedTimestamp)
+            VALUES (\(workoutId), '\(formattedDate)', 1, '\(updatedTimestamp)');
             """
             return self.execute(query: insertQuery)
         }
@@ -347,39 +361,18 @@ class DataBase {
         FROM Workouts
         WHERE id = \(workoutId);
         """
-        var queryStatement: OpaquePointer?
-
-        // Prepare the query
-        if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
-            defer {
-                // Finalize the statement to release resources
-                sqlite3_finalize(queryStatement)
+        
+        if let result = self.selectQuery(query),
+              !result.isEmpty,
+              !result[0].isEmpty,
+              let firstRow = result.first,
+           let lastCompletedTimestampString = firstRow.first as? String {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            dateFormatter.timeZone = TimeZone(identifier: "UTC")
+            if let date: Date = dateFormatter.date(from: lastCompletedTimestampString) {
+                return date
             }
-
-            // Step through the query result
-            if sqlite3_step(queryStatement) == SQLITE_ROW {
-                // Retrieve the date string from the query result
-                if let dateString = sqlite3_column_text(queryStatement, 0) {
-                    let dateStr = String(cString: dateString)
-
-                    // Convert the string date to a Date object
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-                    dateFormatter.timeZone = TimeZone(identifier: "UTC")
-                    if let date = dateFormatter.date(from: dateStr) {
-                        return date
-                    } else {
-                        print("Error: Unable to parse date string.")
-                        return nil
-                    }
-                } else {
-                    // No result found
-                    return nil
-                }
-            }
-        } else {
-            let errorMessage = String(cString: sqlite3_errmsg(db))
-            print("Error preparing statement: \(errorMessage)")
         }
         return nil
     }
@@ -391,14 +384,15 @@ class DataBase {
             exerciseIndex INTEGER,
             workoutId INTEGER,
             name TEXT,
-            metricWeightKg INTEGER,
+            gymWeightUnits INTEGER,
             reps INTEGER,
             sets INTEGER,
             durationHours INTEGER,
             durationMinutes INTEGER,
             durationSeconds INTEGER,
             color TEXT,
-            notes TEXT
+            notes TEXT,
+            showCheckMarkVisual BOOL
         );
         """
         
@@ -412,12 +406,12 @@ class DataBase {
     func fetchExerciseTableRows(workoutId: Int) -> [Exercise] {
         var exercises: [Exercise] = []
         var statement: OpaquePointer?
-        let query = "SELECT name, metricWeightKg, reps, sets, durationHours, durationMinutes, durationSeconds, color, notes, id FROM Exercises WHERE workoutId = \(workoutId) ORDER BY exerciseIndex IS NULL, exerciseIndex ASC, id ASC"
+        let query = "SELECT name, gymWeightUnits, reps, sets, durationHours, durationMinutes, durationSeconds, color, notes, id, showCheckMarkVisual FROM Exercises WHERE workoutId = \(workoutId) ORDER BY exerciseIndex IS NULL, exerciseIndex ASC, id ASC;"
         
         if sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK {
             while sqlite3_step(statement) == SQLITE_ROW {
                 let name = String(cString: sqlite3_column_text(statement, 0))
-                let metricWeightKg = Int(sqlite3_column_int(statement, 1))
+                let gymWeightUnits = Int(sqlite3_column_int(statement, 1))
                 let reps = Int(sqlite3_column_int(statement, 2))
                 let sets = Int(sqlite3_column_int(statement, 3))
                 let durationHours = Int(sqlite3_column_int(statement, 4))
@@ -426,8 +420,9 @@ class DataBase {
                 let color = String(cString: sqlite3_column_text(statement, 7))
                 let notes = String(cString: sqlite3_column_text(statement, 8))
                 let id = Int(sqlite3_column_int(statement, 9))
+                let showCheckMarkVisual = sqlite3_column_int(statement, 10) == 1 ? true : false
 
-                let exercise = Exercise(id: id, name: name, metricWeightKg: metricWeightKg, reps: reps, sets: sets, durationHours: durationHours, durationMinutes: durationMinutes, durationSeconds: durationSeconds, color: color, notes: notes)
+                let exercise = Exercise(id: id, name: name, gymWeightUnits: gymWeightUnits, reps: reps, sets: sets, durationHours: durationHours, durationMinutes: durationMinutes, durationSeconds: durationSeconds, color: color, notes: notes, showCheckMarkVisual: showCheckMarkVisual)
                 exercises.append(exercise)
             }
             sqlite3_finalize(statement)
@@ -456,8 +451,57 @@ class DataBase {
         return true
     }
     
-    func insertExerciseTableRow(workoutId: Int, name: String, metricWeightKg: Int, reps: Int, sets: Int, durationHours: Int, durationMinutes: Int, durationSeconds: Int, color: String, notes: String) -> Bool {
-        let insertQuery = "INSERT INTO Exercises (workoutId, name, metricWeightKg, reps, sets, durationHours, durationMinutes, durationSeconds, color, notes) VALUES (\(workoutId), '\(name)', \(metricWeightKg), \(reps), \(sets), \(durationHours), \(durationMinutes), \(durationSeconds), '\(color)', '\(notes)')"
+    func insertExerciseTableRow(workoutId: Int, name: String, gymWeightUnits: Int, reps: Int, sets: Int, durationHours: Int, durationMinutes: Int, durationSeconds: Int, color: String, notes: String) -> Bool {
+        let insertQuery = "INSERT INTO Exercises (workoutId, name, gymWeightUnits, reps, sets, durationHours, durationMinutes, durationSeconds, color, notes) VALUES (\(workoutId), '\(name)', \(gymWeightUnits), \(reps), \(sets), \(durationHours), \(durationMinutes), \(durationSeconds), '\(color)', '\(notes)');"
         return self.execute(query: insertQuery)
+    }
+    
+    func deleteExercise(exerciseId: Int) -> Bool {
+        let deleteQuery: String = "DELETE FROM Exercises WHERE id = \(exerciseId)"
+        return self.execute(query: deleteQuery)
+    }
+    
+    func updateExercise(exerciseId: Int, workoutId: Int, name: String, gymWeightUnits: Int, reps: Int, sets: Int, durationHours: Int, durationMinutes: Int, durationSeconds: Int, color: String, notes: String) -> Bool {
+        let updateQuery = """
+        UPDATE Exercises
+        SET workoutId = \(workoutId), name = '\(name)', gymWeightUnits = \(gymWeightUnits), reps = \(reps), sets = \(sets), durationHours = \(durationHours), durationMinutes = \(durationMinutes), durationSeconds = \(durationSeconds), color = '\(color)', notes = '\(notes)'
+        WHERE id = \(exerciseId);
+        """
+        return self.execute(query: updateQuery)
+    }
+    
+    func updateWorkout(workoutId: Int, name: String, durationMinutes: Int, selectedColor: String, chunkSize: Int) -> Bool {
+        let updateQuery = """
+        UPDATE Workouts
+        SET name = '\(name)', durationMinutes = \(durationMinutes), color = '\(selectedColor)', chunkSize = \(chunkSize)
+        WHERE id = \(workoutId);
+        """
+        return self.execute(query: updateQuery)
+    }
+    
+    func deleteWorkout(workoutId: Int) -> Bool {
+        let deleteQuery: String = "DELETE FROM Workouts WHERE id = \(workoutId);"
+        return self.execute(query: deleteQuery)
+    }
+    
+    func updateExerciseCheckMarkVisual(exerciseId: Int, newValue: Bool) {
+        let updateQuery: String = """
+        UPDATE Exercises
+        SET showCheckMarkVisual = \(newValue ? 1 : 0)
+        WHERE id = \(exerciseId);
+        """
+        if self.execute(query: updateQuery) {
+        } else {
+            print("Error updating showCheckMarkVisual for exerciseId: \(exerciseId)")
+        }
+    }
+    
+    func clearCheckMarkVisuals(workoutId: Int) -> Bool {
+        let updateQuery = """
+        UPDATE Exercises
+        SET showCheckMarkVisual = 0
+        WHERE workoutId = \(workoutId);
+        """
+        return self.execute(query: updateQuery)
     }
 }

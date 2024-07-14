@@ -75,10 +75,8 @@ struct ViewCurrentIntervalTracking: View {
             return
         }
         if color == firstInterval.color.color {
-            print(color)
             SoundPlayer.playSound(firstInterval.sound)
         } else {
-            print(color)
             SoundPlayer.playSound(secondInterval.sound)
         }
     }

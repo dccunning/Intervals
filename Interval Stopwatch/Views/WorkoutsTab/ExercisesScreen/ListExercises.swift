@@ -41,7 +41,6 @@ struct ListExercisesView: View {
     }
     
     var body: some View {
-        // Final TODO: Test on all devices: might need to change workoutPreview text size
         ZStack {
             VStack (alignment: .leading) {
                 HStack {

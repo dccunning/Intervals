@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct ViewSettings: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var settings: Settings
     @Binding var isPresented: Bool
     @ObservedObject var stopwatch: Stopwatch
@@ -32,7 +31,7 @@ struct ViewSettings: View {
                     firstInterval: firstInterval,
                     secondInterval: secondInterval
                 )
-                InteractionSettingsSection(
+                AppAppearanceSettingsSection(
                     settings: settings,
                     stopwatch: stopwatch
                 )
@@ -44,10 +43,10 @@ struct ViewSettings: View {
             .navigationBarTitle("Settings")
             .navigationBarItems(trailing: Button("Done") {
                 isPresented = false
-            }).background(Color.black)
+            })
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .preferredColorScheme(colorScheme)
+        .preferredColorScheme(settings.appDisplayMode == AppColorScheme.system ? ColorScheme(.unspecified) : settings.appDisplayMode == AppColorScheme.dark ? .dark : .light)
     }
 }
 
@@ -56,6 +55,7 @@ struct SoundSettingsSection: View {
     @ObservedObject var stopwatch: Stopwatch
     @ObservedObject var firstInterval: Interval
     @ObservedObject var secondInterval: Interval
+    let allSoundsOrdered: [SoundPlayer.SystemSound] = [SoundPlayer.SystemSound.off] + SoundPlayer.SystemSound.allCases.filter { $0 != .off }.sorted(by: { $0.displayName < $1.displayName })
 
     var body: some View {
         Section(header: Text("Sounds")) {
@@ -64,7 +64,7 @@ struct SoundSettingsSection: View {
             }
             
             Picker("Active sound", selection: $firstInterval.sound) {
-                ForEach(SoundPlayer.SystemSound.allCases, id: \.self) { sound in
+                ForEach(allSoundsOrdered, id: \.self) { sound in
                     Text(sound.displayName).tag(sound)
                 }
             }.pickerStyle(DefaultPickerStyle())
@@ -74,7 +74,7 @@ struct SoundSettingsSection: View {
             }
             
             Picker("Rest sound", selection: $secondInterval.sound) {
-                ForEach(SoundPlayer.SystemSound.allCases, id: \.self) { sound in
+                ForEach(allSoundsOrdered, id: \.self) { sound in
                     Text(sound.displayName).tag(sound)
                 }
             }.pickerStyle(DefaultPickerStyle())
@@ -84,7 +84,7 @@ struct SoundSettingsSection: View {
             }
             
             Picker("End sound", selection: $stopwatch.endSound) {
-                ForEach(SoundPlayer.SystemSound.allCases, id: \.self) { sound in
+                ForEach(allSoundsOrdered, id: \.self) { sound in
                     Text(sound.displayName).tag(sound)
                 }
             }.pickerStyle(DefaultPickerStyle())
@@ -96,12 +96,12 @@ struct SoundSettingsSection: View {
     }
 }
 
-struct InteractionSettingsSection: View {
+struct AppAppearanceSettingsSection: View {
     @ObservedObject var settings: Settings
     @ObservedObject var stopwatch: Stopwatch
 
     var body: some View {
-        Section(header: Text("Interactions")) {
+        Section(header: Text("App Appearance")) {
             Picker("Selection type", selection: $settings.pickerStyle) {
                 Text("Wheel").tag(PickerStyleSelection.wheel.displayName)
                 Text("Drop down").tag(PickerStyleSelection.dropDown.displayName)
@@ -112,6 +112,15 @@ struct InteractionSettingsSection: View {
             
             Toggle("Show end lines", isOn: $stopwatch.showEndLines).onChange(of: stopwatch.showEndLines) { oldValue, newValue in
                 settings.showEndLines = newValue
+            }
+            
+            Picker("Display mode", selection: $settings.appDisplayMode) {
+                ForEach(AppColorScheme.allCases) { scheme in
+                    Text(scheme.displayName).tag(scheme)
+                }
+            }.pickerStyle(DefaultPickerStyle()).onChange(of: settings.appDisplayMode) {
+                oldValue, newValue in
+                settings.appDisplayMode = newValue
             }
         }
     }

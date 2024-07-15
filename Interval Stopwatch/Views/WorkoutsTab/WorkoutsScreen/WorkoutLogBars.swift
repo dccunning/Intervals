@@ -27,7 +27,7 @@ struct WorkoutLogBars: View {
         let barSpacing: CGFloat = 10
         let barHeight: CGFloat = 70
         let selectedColumnColor: Color = colorScheme == .dark ? Color.white.opacity(0.2) : Color.black.opacity(0.2)
-        let defaultColumnColor: Color = colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.05)
+        let defaultColumnColor: Color = colorScheme == .dark ? Color.white.opacity(0.05) : Color.black.opacity(0.05)
         let weekTextColor: Color = colorScheme == .dark ? Color.white.opacity(0.5) : Color.black.opacity(0.5)
         
         HStack(spacing: barSpacing) {

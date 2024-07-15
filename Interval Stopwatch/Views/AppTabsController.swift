@@ -27,6 +27,7 @@ struct ContentView: View {
                         Text("Workouts")
                     }.tag(2)
             }
+            .preferredColorScheme(mySettings.appDisplayMode == AppColorScheme.system ? ColorScheme(.unspecified) : mySettings.appDisplayMode == AppColorScheme.dark ? .dark : .light)
             .onAppear() {
                 let standardAppearance = UITabBarAppearance()
                 standardAppearance.backgroundColor = UIColor.clear
@@ -36,3 +37,4 @@ struct ContentView: View {
         }
     }
 }
+

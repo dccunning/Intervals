@@ -52,6 +52,22 @@ enum MeasurementSystem: String, CaseIterable {
     }
 }
 
+enum AppColorScheme: String, CaseIterable, Identifiable {
+    case system
+    case light
+    case dark
+    
+    var id: String { self.rawValue }
+    
+    var displayName: String {
+        switch self {
+        case .system: return "System"
+        case .light: return "Light"
+        case .dark: return "Dark"
+        }
+    }
+}
+
 enum ColorSelection: String, CaseIterable {
     case blue
     case red
@@ -118,6 +134,7 @@ class Settings: ObservableObject {
     @Published var endSound: SoundPlayer.SystemSound {didSet {UserDefaults.standard.set(endSound.rawValue, forKey: "endSound")}}
     @Published var tabSelectedValue: Int {didSet {UserDefaults.standard.set(tabSelectedValue, forKey: "tabSelectedValue")}}
     @Published var measurementSystem: MeasurementSystem {didSet {UserDefaults.standard.set(measurementSystem.rawValue, forKey: "measurementSystem")}}
+    @Published var appDisplayMode: AppColorScheme {didSet {UserDefaults.standard.set(appDisplayMode.rawValue, forKey: "appDisplayMode")}}
 
     
     init() {// Initialising settings for first use of app with User Defaults
@@ -170,16 +187,16 @@ class Settings: ObservableObject {
            let activeSoundValue = SoundPlayer.SystemSound(rawValue: activeSoundRawValue) {
             self.activeSound = activeSoundValue
         } else {
-            UserDefaults.standard.set(SoundPlayer.SystemSound.orbDongDong.rawValue, forKey: "activeSound")
-            self.activeSound = SoundPlayer.SystemSound.orbDongDong
+            UserDefaults.standard.set(SoundPlayer.SystemSound.tripleChimePlay.rawValue, forKey: "activeSound")
+            self.activeSound = SoundPlayer.SystemSound.tripleChimePlay
         }
         
         if let restSoundRawValue = UserDefaults.standard.object(forKey: "restSound") as? UInt32,
            let restSoundValue = SoundPlayer.SystemSound(rawValue: restSoundRawValue) {
             self.restSound = restSoundValue
         } else {
-            UserDefaults.standard.set(SoundPlayer.SystemSound.tripleChimePlay.rawValue, forKey: "restSound")
-            self.restSound = SoundPlayer.SystemSound.tripleChimePlay
+            UserDefaults.standard.set(SoundPlayer.SystemSound.tripleChimePause.rawValue, forKey: "restSound")
+            self.restSound = SoundPlayer.SystemSound.tripleChimePause
         }
         
         if let endSoundRawValue = UserDefaults.standard.object(forKey: "endSound") as? UInt32,
@@ -203,6 +220,14 @@ class Settings: ObservableObject {
         } else {
             UserDefaults.standard.set(MeasurementSystem.metric.rawValue, forKey: "measurementSystem")
             self.measurementSystem = MeasurementSystem.metric
+        }
+
+        if let appDisplayModeRawValue = UserDefaults.standard.string(forKey: "appDisplayMode"),
+            let appDisplayModeValue = AppColorScheme(rawValue: appDisplayModeRawValue) {
+            self.appDisplayMode = appDisplayModeValue
+        } else {
+            UserDefaults.standard.set(AppColorScheme.system.rawValue, forKey: "appDisplayMode")
+            self.appDisplayMode = AppColorScheme.system
         }
     }
 }

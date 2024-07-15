@@ -56,9 +56,9 @@ struct ViewStopwatchMain: View {
                         timeFont: clockWidth*0.065
                     )
                     
-                    let gearFont: CGFloat = clockWidth*0.08
+                    let gearFont: CGFloat = clockWidth*0.07
                     Button(action: {isSettingsPresented.toggle()}) {
-                        Image(systemName: "gear").font(Font.system(size: gearFont)).padding().foregroundColor(.white)
+                        Image(systemName: "gear").font(Font.system(size: gearFont)).padding()
                     }
                     .offset(x: (screenWidth-gearFont)/2-border, y: -(clockWidth-gearFont)/2)
                 }

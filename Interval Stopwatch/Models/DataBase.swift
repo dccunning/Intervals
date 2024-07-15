@@ -115,7 +115,6 @@ class DataBase {
         );
         """
         if self.execute(query: createTableQuery) {
-            print("Table created or exists: Workouts")
         } else {
             print("Error creating Workouts table.")
         }
@@ -197,7 +196,6 @@ class DataBase {
         """
         
         if self.execute(query: createTableQuery) {
-            print("Table created or exists: WorkoutsCompleted")
         } else {
             print("Error creating WorkoutsCompleted table.")
         }
@@ -397,7 +395,6 @@ class DataBase {
         """
         
         if self.execute(query: createTableQuery) {
-            print("Table created or exists: Exercises")
         } else {
             print("Error creating Exercises table.")
         }

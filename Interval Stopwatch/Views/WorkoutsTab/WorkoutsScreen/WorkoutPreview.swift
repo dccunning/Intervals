@@ -14,6 +14,12 @@ struct WorkoutPreview: View {
     @Binding var workout: Workout
     var border: CGFloat
     var color: ColorSelection
+    var textColor: Color {
+        if color.color == .black {
+            return color.color.lighter(by: 50)
+        }
+        return color.color.lighter(by: -50)
+    }
     
     private var formattedDate: String {
         if let lastCompletedTimestamp = workout.lastCompletedTimestamp {
@@ -31,39 +37,37 @@ struct WorkoutPreview: View {
         self._workouts = workouts
         self._workout = workout
         self.border = border
-        self.color = ColorSelection.fromString(workout.wrappedValue.color) ?? .white
+        self.color = ColorSelection.fromString(workout.wrappedValue.color) ?? ColorSelection.white
     }
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
+            HStack(spacing: border/4) {
                 Spacer()
+                Image(systemName: "hourglass").foregroundColor(textColor).scaleEffect(0.9)
                 if workout.durationMinutes % 60 == 0 {
-                    Text("\(workout.durationMinutes / 60)h").foregroundColor(self.color == .black ? Color.white : Color.black)
+                    Text("\(workout.durationMinutes / 60)h").foregroundColor(textColor)
                 } else if workout.durationMinutes < 60 {
-                    Text("\(workout.durationMinutes)m").foregroundColor(self.color == .black ? Color.white : Color.black)
+                    Text("\(workout.durationMinutes)m").foregroundColor(textColor)
                 } else {
-                    Text("\(workout.durationMinutes / 60)h \(workout.durationMinutes % 60)m").foregroundColor(self.color == .black ? Color.white : Color.black)
+                    Text("\(workout.durationMinutes / 60)h \(workout.durationMinutes % 60)m").foregroundColor(textColor)
                 }
-                Spacer().frame(width: border/4)
             }
             HStack {
-                Spacer().frame(width: border)
                 Text("\(workout.name)")
-                    .foregroundColor(self.color == .black ? Color.white : Color.black)
+                    .bold()
+                    .foregroundColor(textColor)
                     .font(.title2)
                     .lineLimit(1)
                     .truncationMode(.tail)
                 Spacer()
             }
+            .offset(x: border)
             HStack {
-                Spacer()
-                Text("\(formattedDate)")
-                    .foregroundColor(self.color == .black ? Color.white : Color.black)
-                Spacer().frame(width: border/4)
+                Text(" ").foregroundColor(textColor)
             }
         }
-        .padding(-5*border/4)
+        .padding(-border)
         .background(.clear)
         .swipeActions (edge: .leading) {
             let workoutIsCompleted: Bool = DataBase().workoutIsCompletedOnDate(workoutId: workout.id, date: currentSelectedDate)

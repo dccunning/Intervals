@@ -32,74 +32,55 @@ struct ViewInputTimeInterval: View {
         VStack(alignment: .center) {
             HStack(spacing: 0) {
                 Spacer().frame(width: border)
+                
                 Text(interval.name)
-                    .foregroundColor(textColor)
                     .font(.system(size: 20))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(width: border*7.5, alignment: .leading)
                 
-                if settings.pickerStyle == "Drop down" {
+                ZStack(alignment: .leading) {
                     Picker(
                         selection: $selectedMinutes,
                         label: Text("Minutes").foregroundColor(textColor),
                         content: {
                             ForEach(0..<60) { min in
-                                Text("\(min)").tag(min).foregroundColor(interval.color.color)
-                            }
-                        }
-                    )
-                    .pickerStyle(DefaultPickerStyle())
-                    .scaleEffect(1.2).frame(minWidth: width/6, maxWidth: width/6, alignment: .trailing)
-                } else {
-                    Picker(
-                        selection: $selectedMinutes,
-                        label: Text("Minutes").foregroundColor(textColor),
-                        content: {
-                            ForEach(0..<60) { min in
-                                Text("\(min)").tag(min).foregroundColor(interval.color.color)
+                                Text(String(format: "%2d", min)).tag(min).foregroundColor(interval.color.color).offset(x: -width/25, y: 0)
                             }
                         }
                     )
                     .pickerStyle(WheelPickerStyle())
-                    .scaleEffect(1.2).frame(minWidth: width/6, maxWidth: width/6, alignment: .trailing)
+                    .scaleEffect(1.2).frame(width: border*5, alignment: .trailing)
+                    
+                    Text("min")
+                        .foregroundColor(textColor).font(.system(size: 20))
+                        .offset(x: width/7.5, y: 0)
                 }
                 
-                Text("min").foregroundColor(textColor).font(.system(size: 20))
+                Spacer().frame(width: border/2)
                 
-                if settings.pickerStyle == "Drop down" {
+                ZStack(alignment: .leading) {
                     Picker(
                         selection: $selectedSeconds,
                         label: Text("Seconds").foregroundColor(textColor),
                         content: {
                             ForEach(0..<60 / 5) { index in
                                 let second = index * 5
-                                Text("\(second)").tag(second).foregroundColor(interval.color.color)
-                            }
-                        }
-                    )
-                    .pickerStyle(DefaultPickerStyle())
-                    .scaleEffect(1.2).frame(minWidth: width/6, maxWidth: width/6, alignment: .trailing)
-                } else {
-                    Picker(
-                        selection: $selectedSeconds,
-                        label: Text("Seconds").foregroundColor(textColor),
-                        content: {
-                            ForEach(0..<60 / 5) { index in
-                                let second = index * 5
-                                Text("\(second)").tag(second).foregroundColor(interval.color.color)
+                                Text(String(format: "%2d", second)).tag(second).foregroundColor(interval.color.color)
+                                    .offset(x: -width/25, y: 0)
                             }
                         }
                     )
                     .pickerStyle(WheelPickerStyle())
-                    .scaleEffect(1.2).frame(minWidth: width/6, maxWidth: width/6, alignment: .trailing)
+                    .scaleEffect(1.2).frame(width: border*5, alignment: .trailing)
+                    
+                    Text("sec")
+                        .foregroundColor(textColor).font(.system(size: 20))
+                        .offset(x: width/7.5, y: 0)
                 }
-
-                
-                Text("sec").foregroundColor(textColor).font(.system(size: 20))
                 
                 Spacer().frame(width: border)
-            }.frame(maxWidth: .infinity)
+            }
         }
-        .frame(height: height)
+        .frame(minHeight: height*9/10, maxHeight: height)
         .onChange(of: selectedMinutes) { updateIntervalTime() }
         .onChange(of: selectedSeconds) { updateIntervalTime() }
     }
@@ -110,3 +91,4 @@ struct ViewInputTimeInterval: View {
     }
     
 }
+

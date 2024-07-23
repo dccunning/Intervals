@@ -18,9 +18,8 @@ class Exercise: ObservableObject, Identifiable, Hashable {
     @Published var durationSeconds: Int
     @Published var color: Color
     @Published var notes: String
-    @Published var showCheckMarkVisual: Bool
     
-    init(id: Int, name: String, gymWeightUnits: Int = 0, reps: Int = 0, sets: Int = 0, durationHours: Int = 0, durationMinutes: Int = 0, durationSeconds: Int = 0, color: String = "", notes: String = "", showCheckMarkVisual: Bool = false) {
+    init(id: Int, name: String, gymWeightUnits: Int = 0, reps: Int = 0, sets: Int = 0, durationHours: Int = 0, durationMinutes: Int = 0, durationSeconds: Int = 0, color: String = "", notes: String = "") {
         self.id = id
         self.name = name
         self.gymWeightUnits = gymWeightUnits
@@ -31,7 +30,6 @@ class Exercise: ObservableObject, Identifiable, Hashable {
         self.durationSeconds = durationSeconds
         self.color = ColorSelection.fromString(color)?.color ?? .clear
         self.notes = notes
-        self.showCheckMarkVisual = showCheckMarkVisual
     }
     
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {

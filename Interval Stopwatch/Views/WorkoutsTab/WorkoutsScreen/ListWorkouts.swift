@@ -18,9 +18,10 @@ struct ListWorkoutsView: View {
         
     init(settings: Settings) {
         UITableView.appearance().backgroundColor = .black
-        DataBase().createWorkoutsCompletedTable()
         DataBase().createWorkoutTable()
         DataBase().createExerciseTable()
+        DataBase().createWorkoutsCompletedTable()
+        DataBase().createExercisesCompletedTable()
         self._mySettings = State(initialValue: settings)
     }
     
@@ -28,9 +29,8 @@ struct ListWorkoutsView: View {
     
     
     var body: some View {
-        let verticalSpacer: CGFloat = 10
         let workoutPreviewHeight: CGFloat = 50
-        let workoutListSpacing: CGFloat = 10
+        let verticalSpacer: CGFloat = workoutPreviewHeight/5
         
         NavigationView {
             VStack {
@@ -43,7 +43,7 @@ struct ListWorkoutsView: View {
                     updateWorkoutsSelected()
                 })
                 
-                Spacer().frame(height: verticalSpacer)
+                Spacer().frame(height: verticalSpacer*0.8)
                     List {
                         ForEach(workouts.indices, id: \.self) { index in
                             WorkoutPreview(
@@ -51,7 +51,7 @@ struct ListWorkoutsView: View {
                                 currentSelectedDate: self.$currentSelectedDate,
                                 workouts: self.$workouts,
                                 workout: self.$workouts[index],
-                                border: 10
+                                border: verticalSpacer
                             )
                             .background(
                                 NavigationLink(
@@ -64,7 +64,6 @@ struct ListWorkoutsView: View {
                                     )
                                 ).opacity(0)
                             )
-                            .frame(height: workoutPreviewHeight)
                             .listRowBackground(ColorSelection.fromString(self.workouts[index].color)?.color)
                             .id(UUID())
                         }
@@ -73,13 +72,13 @@ struct ListWorkoutsView: View {
                             _ = DataBase().updateWorkoutIndexes(workouts: workouts)
                         }
                     }
-                    .listRowSpacing(workoutListSpacing)
+                    .listRowSpacing(verticalSpacer*0.8)
                     .scrollContentBackground(.hidden)
                     .contentMargins(.vertical, verticalSpacer)
                     .listStyle(InsetGroupedListStyle())
                     .listSectionSpacing(CGFloat(verticalSpacer))
                     .navigationBarTitle("Workouts")
-                    .navigationBarItems(trailing: 
+                    .navigationBarItems(trailing:
                         Button(action: {
                             self.isAddWorkoutMenuPresented = true
                         }) {
@@ -130,5 +129,3 @@ extension View {
         return self
     }
 }
-
-

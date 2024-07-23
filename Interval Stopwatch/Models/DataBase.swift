@@ -389,8 +389,7 @@ class DataBase {
             durationMinutes INTEGER,
             durationSeconds INTEGER,
             color TEXT,
-            notes TEXT,
-            showCheckMarkVisual BOOL
+            notes TEXT
         );
         """
         
@@ -403,7 +402,7 @@ class DataBase {
     func fetchExerciseTableRows(workoutId: Int) -> [Exercise] {
         var exercises: [Exercise] = []
         var statement: OpaquePointer?
-        let query = "SELECT name, gymWeightUnits, reps, sets, durationHours, durationMinutes, durationSeconds, color, notes, id, showCheckMarkVisual FROM Exercises WHERE workoutId = \(workoutId) ORDER BY exerciseIndex IS NULL, exerciseIndex ASC, id ASC;"
+        let query = "SELECT name, gymWeightUnits, reps, sets, durationHours, durationMinutes, durationSeconds, color, notes, id FROM Exercises WHERE workoutId = \(workoutId) ORDER BY exerciseIndex IS NULL, exerciseIndex ASC, id ASC;"
         
         if sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK {
             while sqlite3_step(statement) == SQLITE_ROW {
@@ -417,9 +416,8 @@ class DataBase {
                 let color = String(cString: sqlite3_column_text(statement, 7))
                 let notes = String(cString: sqlite3_column_text(statement, 8))
                 let id = Int(sqlite3_column_int(statement, 9))
-                let showCheckMarkVisual = sqlite3_column_int(statement, 10) == 1 ? true : false
 
-                let exercise = Exercise(id: id, name: name, gymWeightUnits: gymWeightUnits, reps: reps, sets: sets, durationHours: durationHours, durationMinutes: durationMinutes, durationSeconds: durationSeconds, color: color, notes: notes, showCheckMarkVisual: showCheckMarkVisual)
+                let exercise = Exercise(id: id, name: name, gymWeightUnits: gymWeightUnits, reps: reps, sets: sets, durationHours: durationHours, durationMinutes: durationMinutes, durationSeconds: durationSeconds, color: color, notes: notes)
                 exercises.append(exercise)
             }
             sqlite3_finalize(statement)
@@ -481,24 +479,139 @@ class DataBase {
         return self.execute(query: deleteQuery)
     }
     
-    func updateExerciseCheckMarkVisual(exerciseId: Int, newValue: Bool) {
-        let updateQuery: String = """
-        UPDATE Exercises
-        SET showCheckMarkVisual = \(newValue ? 1 : 0)
-        WHERE id = \(exerciseId);
+    func createExercisesCompletedTable() {
+        let createTableQuery = """
+        CREATE TABLE IF NOT EXISTS ExercisesCompleted (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            exerciseId INTEGER,
+            exerciseName TEXT,
+            markedForDate TIMESTAMP,
+            completed BOOL,
+            updatedTimestamp TIMESTAMP,
+            gymWeightUnits INTEGER,
+            reps INTEGER,
+            sets INTEGER,
+            durationHours INTEGER,
+            durationMinutes INTEGER,
+            durationSeconds INTEGER
+        );
         """
-        if self.execute(query: updateQuery) {
+        
+        if self.execute(query: createTableQuery) {
         } else {
-            print("Error updating showCheckMarkVisual for exerciseId: \(exerciseId)")
+            print("Error creating ExercisesCompleted table.")
         }
     }
     
-    func clearCheckMarkVisuals(workoutId: Int) -> Bool {
-        let updateQuery = """
-        UPDATE Exercises
-        SET showCheckMarkVisual = 0
-        WHERE workoutId = \(workoutId);
+    func insertOrToggleExercisesCompletedRow(exerciseId: Int, exerciseName: String, markedForDate: Date, gymWeightUnits: Int, reps: Int, sets: Int, durationHours: Int, durationMinutes: Int, durationSeconds: Int) -> Bool {
+        // Do this every time an exercise is marked: insert
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let dateTimeFormatter = DateFormatter()
+        dateTimeFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateTimeFormatter.timeZone = TimeZone(identifier: "UTC")
+        let formattedDate = dateFormatter.string(from: markedForDate)
+        let updatedTimestamp = dateTimeFormatter.string(from: Date())
+        
+        // Check if the row exists
+        let checkQuery = """
+        SELECT id, completed
+        FROM ExercisesCompleted
+        WHERE exerciseId = \(exerciseId) AND markedForDate = '\(formattedDate)';
         """
-        return self.execute(query: updateQuery)
+        
+        if let result = selectQuery(checkQuery), !result.isEmpty, !result[0].isEmpty {
+            if let firstRow = result.first, result.count > 0 {
+                let currentCompleted = firstRow[1] as? Int == 1
+                let toggleCompleted = !currentCompleted
+
+                let updateQuery = """
+                UPDATE ExercisesCompleted
+                SET completed = \(toggleCompleted ? 1 : 0), updatedTimestamp = '\(updatedTimestamp)', exerciseName = '\(exerciseName)', gymWeightUnits = \(gymWeightUnits), reps = \(reps), sets = \(sets), durationHours = \(durationHours), durationMinutes = \(durationMinutes), durationSeconds = \(durationSeconds)
+                WHERE exerciseId = \(exerciseId) AND markedForDate = '\(formattedDate)';
+                """
+
+                return self.execute(query: updateQuery)
+            } else {
+                print("Incorrect result data")
+                return false
+            }
+        } else {
+            let insertQuery = """
+            INSERT INTO ExercisesCompleted (exerciseId, exerciseName, markedForDate, completed, updatedTimestamp, gymWeightUnits, reps, sets, durationHours, durationMinutes, durationSeconds)
+            VALUES (\(exerciseId), '\(exerciseName)', '\(formattedDate)', 1, '\(updatedTimestamp)', \(gymWeightUnits), \(reps), \(sets), \(durationHours), \(durationMinutes), \(durationSeconds));
+            """
+
+            return self.execute(query: insertQuery)
+        }
     }
+    
+    func fetchExercisesCompletedHistory(exerciseName: String) -> [ExercisesCompleted] {
+        // Get a table of exercises with the given exercise name and return details for each marked date
+        let selectQuery = """
+        SELECT EC.id, EC.markedForDate, EC.gymWeightUnits, EC.reps, EC.sets, EC.durationHours, EC.durationMinutes, EC.durationSeconds
+        FROM ExercisesCompleted EC
+        INNER JOIN (
+            SELECT markedForDate, MAX(updatedTimestamp) as latestTimestamp
+            FROM ExercisesCompleted
+            WHERE exerciseName = '\(exerciseName)' AND completed
+            GROUP BY markedForDate
+        ) Latest ON EC.markedForDate = Latest.markedForDate AND EC.updatedTimestamp = Latest.latestTimestamp
+        WHERE EC.exerciseName = '\(exerciseName)' AND completed
+        ORDER BY EC.markedForDate DESC
+        LIMIT 50;
+        """
+        var allExercisesCompleted: [ExercisesCompleted] = []
+        var statement: OpaquePointer?
+        
+        if sqlite3_prepare_v2(db, selectQuery, -1, &statement, nil) == SQLITE_OK {
+            while sqlite3_step(statement) == SQLITE_ROW {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.timeZone = TimeZone(identifier: "UTC")
+                
+                let id = Int(sqlite3_column_int(statement, 0))
+                let markedForDate = String(cString: sqlite3_column_text(statement, 1))
+                let gymWeightUnits = Int(sqlite3_column_int(statement, 2))
+                let reps = Int(sqlite3_column_int(statement, 3))
+                let sets = Int(sqlite3_column_int(statement, 4))
+                let durationHours = Int(sqlite3_column_int(statement, 5))
+                let durationMinutes = Int(sqlite3_column_int(statement, 6))
+                let durationSeconds = Int(sqlite3_column_int(statement, 7))
+
+                if let markedForDateConverted = dateFormatter.date(from: markedForDate) {
+                    let exerciseCompleted = ExercisesCompleted(id: id, markedForDate: markedForDateConverted, gymWeightUnits: gymWeightUnits, reps: reps, sets: sets, durationHours: durationHours, durationMinutes: durationMinutes, durationSeconds: durationSeconds)
+                    allExercisesCompleted.append(exerciseCompleted)
+                }
+            }
+            sqlite3_finalize(statement)
+        } else {
+            print("Error preparing query: fetchExercisesCompletedHistory")
+        }
+
+        return allExercisesCompleted
+    }
+    
+    func isExerciseCompleteOnDate(exerciseId: Int, date: Date) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let formattedDate = dateFormatter.string(from: date)
+
+        let query = """
+        SELECT id, completed
+        FROM ExercisesCompleted
+        WHERE exerciseId = \(exerciseId) AND markedForDate = '\(formattedDate)';
+        """
+
+        if let result = selectQuery(query), !result.isEmpty, !result[0].isEmpty {
+            if let firstRow = result.first, result.count > 0 {
+                let currentCompleted = firstRow[1] as? Int == 1
+                return currentCompleted
+            }
+        }
+        return false
+    }
+    
 }

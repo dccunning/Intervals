@@ -23,13 +23,10 @@ struct ListExercisesView: View {
     var db: DataBase = DataBase()
         
     private var formattedDate: String {
-        if let lastCompletedTimestamp = workout.lastCompletedTimestamp {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "EEEE, MMMM d"
-            dateFormatter.timeZone = TimeZone(identifier: "UTC")
-            return dateFormatter.string(from: lastCompletedTimestamp)
-        }
-        return " "
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, MMMM d"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        return dateFormatter.string(from: currentSelectedDate)
     }
     
     init(settings: Settings, workout: Binding<Workout>, workouts: Binding<[Workout]>, currentSelectedDate: Binding<Date>) {
@@ -44,13 +41,14 @@ struct ListExercisesView: View {
         ZStack {
             VStack (alignment: .leading) {
                 HStack {
-                    Text("⏳ \(formattedDuration(minutes: workout.durationMinutes))").padding(.leading, 16)
+                    Image(systemName: "hourglass").padding(.leading, 16)
+                    Text("\(formattedDuration(minutes: workout.durationMinutes))") // ⏳
                     Spacer()
-                    Text("🎚️ \(workout.chunkSize)")
+                    Image(systemName: "scalemass")
+                    Text("\(workout.chunkSize)") // 🎚️
                     Spacer()
-                    if workout.lastCompletedTimestamp != nil {
-                        Text("🗓️ \(formattedDate)").padding(.trailing, 16)
-                    }
+                    Image(systemName: "calendar")
+                    Text("\(formattedDate)").padding(.trailing, 16) // 🗓️
                 }
                 
                 List {
@@ -58,7 +56,7 @@ struct ListExercisesView: View {
                     Section {
                         ForEach($exercises, id: \.self) { $exercise in
                             let rowColor: Color = $exercise.wrappedValue.color == .clear ? defaultListColor : $exercise.wrappedValue.color.opacity(0.5)
-                            ExercisePreview(settings: settings, exercise: $exercise.wrappedValue)
+                            ExercisePreview(settings: settings, exercise: $exercise.wrappedValue, currentSelectedDate: $currentSelectedDate)
                                 .listRowBackground(rowColor)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
@@ -79,7 +77,6 @@ struct ListExercisesView: View {
                             Spacer()
                             Button(action: {
                                 if
-                                    self.db.clearCheckMarkVisuals(workoutId: workout.id) &&
                                     self.db.toggleOrInsertWorkoutCompletedTableRow(
                                         workoutId: workout.id,
                                         markedForDate: currentSelectedDate,

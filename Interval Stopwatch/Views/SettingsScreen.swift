@@ -102,14 +102,6 @@ struct AppAppearanceSettingsSection: View {
 
     var body: some View {
         Section(header: Text("App Appearance")) {
-            Picker("Selection type", selection: $settings.pickerStyle) {
-                Text("Wheel").tag(PickerStyleSelection.wheel.displayName)
-                Text("Drop down").tag(PickerStyleSelection.dropDown.displayName)
-            }.pickerStyle(DefaultPickerStyle()).onChange(of: settings.pickerStyle) {
-                oldValue, newValue in
-                settings.pickerStyle = newValue
-            }
-            
             Toggle("Show end lines", isOn: $stopwatch.showEndLines).onChange(of: stopwatch.showEndLines) { oldValue, newValue in
                 settings.showEndLines = newValue
             }
@@ -189,10 +181,14 @@ struct EmailFeedbackSettingsSection: View {
                 Button(action: {
                     showingOpenEmailConfirmation = true
                 }) {
-                    Text("Report a bug")
+                    Text("Contact us")
                         .foregroundColor(.blue)
                         .frame(maxWidth: .infinity, alignment: .center)
-                }.confirmationDialog("Report a bug or make a feature suggestion via email", isPresented: $showingOpenEmailConfirmation, titleVisibility: .visible) {
+                }.confirmationDialog(
+                    "Report a bug, give feedback or make a feature suggestion via email",
+                    isPresented: $showingOpenEmailConfirmation,
+                    titleVisibility: .visible
+                ) {
                     Button("Open", role: .none) {
                         draftEmail()
                         showingOpenEmailConfirmation = false
@@ -206,7 +202,7 @@ struct EmailFeedbackSettingsSection: View {
     }
     
     private func draftEmail() {
-        guard let url = URL(string: "mailto:intervals.app@gmail.com?subject=Feedback&body=") else {
+        guard let url = URL(string: "mailto:intervals.app@gmail.com?subject=BUG/FEEDBACK/FEATURE&body=") else {
             return
         }
         UIApplication.shared.open(url)

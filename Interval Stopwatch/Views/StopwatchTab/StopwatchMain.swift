@@ -45,6 +45,7 @@ struct ViewStopwatchMain: View {
             
             VStack(spacing: 0) {
                 let clockWidth: CGFloat = min(screenHeight/2, widthMinusBorder)
+                Spacer().frame(height: border/2)
                 ZStack {
                     // max 50% height
                     ViewClockFaceDisplayTime(
@@ -56,9 +57,11 @@ struct ViewStopwatchMain: View {
                         timeFont: clockWidth*0.065
                     )
                     
-                    let gearFont: CGFloat = clockWidth*0.07
+                    let gearFont: CGFloat = screenWidth*0.065
                     Button(action: {isSettingsPresented.toggle()}) {
-                        Image(systemName: "gear").font(Font.system(size: gearFont)).padding()
+                        Image(systemName: "gear")
+                            .font(Font.system(size: gearFont))
+                            .padding()
                     }
                     .offset(x: (screenWidth-gearFont)/2-border, y: -(clockWidth-gearFont)/2)
                 }
@@ -73,7 +76,8 @@ struct ViewStopwatchMain: View {
                     circleWidth: clockWidth/4,
                     border: border
                 )
-                                    
+                Spacer().frame(maxHeight: border/2)
+                
                 VStack(alignment: .leading, spacing: 0) {
                     // max 25% height
                     ViewInputTimeInterval(
@@ -101,8 +105,8 @@ struct ViewStopwatchMain: View {
                     ).disabled(myStopwatch.isRunning || currentCycleDuration == 0)
                     
                     
-                    Spacer()
                     // max 12.5% height
+                    Spacer()
                     HStack(spacing: 0) {
                         Spacer().frame(width: border)
                         ViewCurrentIntervalTracking(

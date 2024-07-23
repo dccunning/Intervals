@@ -27,16 +27,19 @@ struct ViewCurrentIntervalTracking: View {
     }
     
     var body: some View {
-        if cycleDuration > 0 {
+        if cycleDuration >= 0 {
             let minusSecondInterval: Int = if firstInterval.duration > 0 { Int(secondInterval.duration) } else { 0 }
             let showFinalTimeCount = cycle.selectedCount > 0 && stopwatch.elapsedSeconds >= cycle.selectedCount * cycleDuration - minusSecondInterval
 
             HStack (spacing: 0) {
-                if showFinalTimeCount {// Display finished state
-                    Text("\(cycle.selectedCount)").foregroundColor(cycle.color.color).font(.system(size: fontHeight)).frame(maxWidth: .infinity, alignment: .center)
+                if showFinalTimeCount || cycleDuration==0 {// Display finished state
+                    Text("\(cycle.selectedCount)")
+                        .foregroundColor(cycleDuration==0 ? .clear : cycle.color.color)
+                        .font(.system(size: fontHeight).monospacedDigit())
+                        .frame(maxWidth: .infinity, alignment: .center)
                     
                     Text(String(format: "%2d:%02d", 0, 0))
-                        .foregroundColor(cycle.color.color)
+                        .foregroundColor(cycleDuration==0 ? .clear : cycle.color.color)
                         .font(.system(size: fontHeight).monospacedDigit())
                         .frame(maxWidth: .infinity, alignment: .center)
                         .onAppear {
@@ -51,11 +54,14 @@ struct ViewCurrentIntervalTracking: View {
                     let currentIntervalTimeLeftString = cycle.currentIntervalTimeLeft(stopwatch: stopwatch, firstInterval: firstInterval, secondInterval: secondInterval)
                     let countOrColor = "\(currentColor) \(currentCycleCount)"
                     
-                    Text("\(currentCycleCount)").foregroundColor(currentColor).font(.system(size: fontHeight)).frame(maxWidth: .infinity, alignment: .center
+                    Text("\(currentCycleCount)").foregroundColor(currentColor).font(.system(size: fontHeight).monospacedDigit())
+                        .frame(maxWidth: .infinity, alignment: .center
                     ).onChange(of: countOrColor) {
                         playSoundFor(color: calculateColor())
                     }
-                    Text("\(currentIntervalTimeLeftString)").foregroundColor(currentColor).font(.system(size: fontHeight).monospacedDigit()).frame(maxWidth: .infinity, alignment: .center)
+                    Text("\(currentIntervalTimeLeftString)").foregroundColor(currentColor)
+                        .font(.system(size: fontHeight).monospacedDigit())
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
         }
@@ -82,3 +88,4 @@ struct ViewCurrentIntervalTracking: View {
     }
 
 }
+

@@ -25,6 +25,7 @@
 		269881AF2C3B397F00ACA081 /* ExercisePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269881AE2C3B397F00ACA081 /* ExercisePreview.swift */; };
 		269881B12C3B3FBE00ACA081 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269881B02C3B3FBE00ACA081 /* Exercise.swift */; };
 		26989BE32BEBAF590083434B /* WorkoutLogBars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26989BE22BEBAF590083434B /* WorkoutLogBars.swift */; };
+		26A8128B2C4A92FE0041FB3C /* ExerciseProgressGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A8128A2C4A92FE0041FB3C /* ExerciseProgressGraph.swift */; };
 		26C305C22B9F365E0008B940 /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C305C12B9F365E0008B940 /* Interval.swift */; };
 		26C305C42BA0726C0008B940 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C305C32BA0726C0008B940 /* SettingsScreen.swift */; };
 		26C305C62BA072890008B940 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C305C52BA072890008B940 /* Settings.swift */; };
@@ -34,6 +35,7 @@
 		26E660F22B9B290700FB6AF4 /* InputTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E660F12B9B290700FB6AF4 /* InputTimeInterval.swift */; };
 		26E660F42B9B45EA00FB6AF4 /* TimeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E660F32B9B45EA00FB6AF4 /* TimeControl.swift */; };
 		26E660F62B9B5ABD00FB6AF4 /* CurrentIntervalTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E660F52B9B5ABD00FB6AF4 /* CurrentIntervalTracking.swift */; };
+		26F897B22C49610C00B5AF1E /* ExercisesCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F897B12C49610C00B5AF1E /* ExercisesCompleted.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +60,7 @@
 		269881AE2C3B397F00ACA081 /* ExercisePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePreview.swift; sourceTree = "<group>"; };
 		269881B02C3B3FBE00ACA081 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		26989BE22BEBAF590083434B /* WorkoutLogBars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLogBars.swift; sourceTree = "<group>"; };
+		26A8128A2C4A92FE0041FB3C /* ExerciseProgressGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseProgressGraph.swift; sourceTree = "<group>"; };
 		26C305C12B9F365E0008B940 /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		26C305C32BA0726C0008B940 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		26C305C52BA072890008B940 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -67,6 +70,7 @@
 		26E660F12B9B290700FB6AF4 /* InputTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTimeInterval.swift; sourceTree = "<group>"; };
 		26E660F32B9B45EA00FB6AF4 /* TimeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeControl.swift; sourceTree = "<group>"; };
 		26E660F52B9B5ABD00FB6AF4 /* CurrentIntervalTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentIntervalTracking.swift; sourceTree = "<group>"; };
+		26F897B12C49610C00B5AF1E /* ExercisesCompleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesCompleted.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +139,7 @@
 				26CCF1F02C0B43FD001A90A6 /* ListExercises.swift */,
 				269881AE2C3B397F00ACA081 /* ExercisePreview.swift */,
 				26092DE82C34C87900A06064 /* ExerciseForm.swift */,
+				26A8128A2C4A92FE0041FB3C /* ExerciseProgressGraph.swift */,
 			);
 			path = ExercisesScreen;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 				2693650F2BBF014500602D89 /* Workout.swift */,
 				269881B02C3B3FBE00ACA081 /* Exercise.swift */,
 				262D92752BCD595C005B565C /* WorkoutsCompleted.swift */,
+				26F897B12C49610C00B5AF1E /* ExercisesCompleted.swift */,
 			);
 			path = WorkoutsTab;
 			sourceTree = "<group>";
@@ -300,6 +306,7 @@
 				2608345B2B86BCF000210130 /* StopwatchMain.swift in Sources */,
 				26E660F42B9B45EA00FB6AF4 /* TimeControl.swift in Sources */,
 				269365052BBA039B00602D89 /* ListWorkouts.swift in Sources */,
+				26A8128B2C4A92FE0041FB3C /* ExerciseProgressGraph.swift in Sources */,
 				262D92762BCD595C005B565C /* WorkoutsCompleted.swift in Sources */,
 				269365072BBAEC3B00602D89 /* WorkoutForm.swift in Sources */,
 				261AA72B2BA4521F00552B6F /* Cycle.swift in Sources */,
@@ -307,6 +314,7 @@
 				26C305C62BA072890008B940 /* Settings.swift in Sources */,
 				26C305C22B9F365E0008B940 /* Interval.swift in Sources */,
 				26E660F22B9B290700FB6AF4 /* InputTimeInterval.swift in Sources */,
+				26F897B22C49610C00B5AF1E /* ExercisesCompleted.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +452,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Intervals;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -457,9 +466,11 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dimitricunning.Interval-Stopwatch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -475,6 +486,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Intervals;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -488,9 +500,11 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dimitricunning.Interval-Stopwatch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

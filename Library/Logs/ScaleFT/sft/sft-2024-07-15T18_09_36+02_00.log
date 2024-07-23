@@ -1,0 +1,4 @@
+2024-07-15T18:09:36.614+0200	INFO	sft command	{"args": ["/usr/local/bin/sft", "resolve", "-q", "github.com"], "log_directory": "Library/Logs/ScaleFT/sft", "version": "1.64.3", "pid": 22109}
+2024-07-15T18:09:36.615+0200	DEBUG	Did not load a config from file, using default values	{"path": "Library/Application Support/ScaleFT/sft.conf", "error": "stat Library/Application Support/ScaleFT/sft.conf: no such file or directory"}
+2024-07-15T18:09:36.615+0200	ERROR	CLI Action failed	{"error": "", "action": "resolve"}
+2024-07-15T18:09:36.615+0200	INFO	RecordSpan	{"tags": {"error":true}, "operation": "cli.resolve", "t": "trace", "start": "2024-07-15T18:09:36.615+0200", "duration": "147.125µs", "traceID": 6174078673904379775, "spanID": 3835341603032667749}

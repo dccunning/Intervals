@@ -28,45 +28,31 @@ struct ViewInputIntervalCount: View {
         VStack(alignment: .center) {
             HStack(spacing: 0) {
                 Spacer().frame(width: border)
-                Text("Intervals").foregroundColor(textColor)
-                    .foregroundColor(.white)
+                
+                Text("Intervals")
                     .font(.system(size: 20))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(width: border*7.5, alignment: .leading)
                 
-                if settings.pickerStyle == "Drop down" {
-                    Picker(
-                        selection: $cycle.selectedCount,
-                        label: Text("Intervals").foregroundColor(textColor),
-                        content: {
-                            Text("∞").tag(0).foregroundColor(cycle.color.color)
-                            ForEach(Array(1..<cycle.maxNumber + 1), id: \.self) { count in
-                                Text("\(count)").tag(count).foregroundColor(cycle.color.color)
-                            }
+                Picker(
+                    selection: $cycle.selectedCount,
+                    label: Text("Intervals").foregroundColor(textColor),
+                    content: {
+                        Text("∞").tag(0).foregroundColor(cycle.color.color)
+                        ForEach(Array(1..<cycle.maxNumber + 1), id: \.self) { count in
+                            Text("\(count)").tag(count)
+                                .foregroundColor(cycle.color.color)
                         }
-                    )
-                    .pickerStyle(DefaultPickerStyle())
-                    .scaleEffect(1.2).frame(minWidth: width/6, maxWidth: width/6, alignment: .trailing)
-                } else {
-                    Picker(
-                        selection: $cycle.selectedCount,
-                        label: Text("Intervals").foregroundColor(textColor),
-                        content: {
-                            Text("∞").tag(0).foregroundColor(cycle.color.color)
-                            ForEach(Array(1..<cycle.maxNumber + 1), id: \.self) { count in
-                                Text("\(count)").tag(count).foregroundColor(cycle.color.color)
-                            }
-                        }
-                    )
-                    .pickerStyle(WheelPickerStyle())
-                    .scaleEffect(1.2).frame(minWidth: width/6, maxWidth: width/6, alignment: .trailing)
-                }
-
+                    }
+                )
+                .pickerStyle(WheelPickerStyle())
+                .scaleEffect(1.2).frame(width: border*3.5, alignment: .trailing)
                 
-                Text("min").foregroundColor(.white).font(.system(size: 20)).hidden()
-                Spacer().frame(width: width/6)
-                Text("sec").foregroundColor(.white).font(.system(size: 20)).hidden()
-                Spacer().frame(width: border)
-            }.frame(maxWidth: .infinity)
-        }.frame(height: height)
+                Spacer()
+            }
+        }
+        .frame(minHeight: height*9/10, maxHeight: height)
     }
 }
+
+
+

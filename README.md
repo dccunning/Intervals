@@ -9,6 +9,10 @@ Interval training involves doing an exercise for a set, typically short period o
 ### What Can I Use This App for?
 The Stopwatch tab of the app operates similarly to the iPhone’s Stopwatch with the additional functionality of being able to set an Active Interval time, Rest Interval time and number of Intervals. One sound is played when each active interval ends, another for each rest interval and one when the set number of intervals ends. This allows you to precisely time your interval workout. The other primary use is to log all of your workouts and their respective exercises, including customisable metrics and progression insights over time.
 
+### Data Analytics
+Embedded in each exercise are up to four ways to analyse your progression with historical data depending on how you define the exercise. By comparing number of reps, sets, weight and total volume you can gain an understanding of your progress overtime and (in the future) will be able to compare exercise specific metrics to see which exercises you could be spending more time prioritising to reach your gaols.
+
+
 ### Current Features
 - Stopwatch tab:
     - Stopwatch 

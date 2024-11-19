@@ -1,6 +1,8 @@
 #  Intervals 
 <img src="https://github.com/dccunning/Intervals/blob/main/Interval%20Stopwatch/Assets.xcassets/AppIcon.appiconset/icon_v3.png" alt="App Icon" width="60"/>
-ios app for interval training, logging and sharing exercises.
+ios app for interval training, logging and sharing exercises. 
+
+[View in the App Store](https://apps.apple.com/ca/app/interval-workouts/id6544805304)
 
 ### What is Interval Training?
 Interval training involves doing an exercise for a set, typically short period of time, followed by a set resting time period, and then repeating this process for a set number of times.
